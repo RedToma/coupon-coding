@@ -75,13 +75,13 @@ jobs:
       # S3에 프로젝트를 업로드 합니다.
       - name: S3에 프로젝트 업로드
         run: |
-          aws s3 cp \
-          --region ap-northeast-2 \
-          ./spring-build.zip s3://backend-coupon-bucket
+          aws s3 cp --region ap-northeast-2 ./spring-build.zip s3://backend-coupon-bucket
 
       # CodeDelploy에 배포를 요청합니다.
       - name: Code Deploy 배포 요청
-        run: aws deploy create-deployment --application-name test-app
-          --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name test-app
-          --s3-location bucket=backend-coupon-bucket,bundleType=zip,key=spring-build.zip
+        run: |
+          aws deploy create-deployment \
+            --application-name test-app \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name test-app \
+            --s3-location bucket=backend-coupon-bucket,bundleType=zip,key=spring-build.zip
