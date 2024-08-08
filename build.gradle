@@ -1,0 +1,109 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.8'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+group = 'clone.coding'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	asciidoctorExt
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+	inputs.dir snippetsDir
+	configurations 'asciidoctorExt'
+	sources{
+		include("**/index.adoc")
+	}
+	baseDirFollowsSourceFile()
+	dependsOn test
+}
+
+bootJar {
+	dependsOn asciidoctor
+	from("${asciidoctor.outputDir}") {
+		into 'static/docs'
+	}
+}
+
+subprojects {
+	// 다른 부분은 생략
+	apply plugin: 'jacoco'
+	jacoco {
+		toolVersion = '0.8.8'
+	}
+	jacocoTestReport {
+		dependsOn test
+		reports {
+			html.enabled true // html 설정
+			csv.enabled true // csv 설정
+			xml.enabled true
+			//xml 의 위치 조정
+			xml.destination file("${buildDir}/reports/jacoco.xml")
+		}
+		def Qdomains = []
+		for (qPattern in '/QA'..'/QZ') { // qPattern = '/QA', '/QB', ... '.QZ'
+			Qdomains.add(qPattern + '')
+		}
+		afterEvaluate {
+			classDirectories.setFrom(
+					files(classDirectories.files.collect {
+						fileTree(dir: it, excludes: [
+								// 측정 안하고 싶은 패턴
+								"/Application",
+								"/Config",
+								"/Dto",
+								"/Request",
+								"/Response",
+								"/Interceptor",
+								"*/Exception*"
+								// Querydsl 관련 제거
+						] + Qdomains)
+					})
+			)
+		}
+	}
+	test {
+		useJUnitPlatform()
+		finalizedBy jacocoTestReport
+	}
+}

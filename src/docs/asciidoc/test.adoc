@@ -1,0 +1,15 @@
+== RestDocsTestController
+==== 1.http-response
+include::{snippets}/rest-docs-test-controller-test/rest-docs-test/http-response.adoc[]
+==== 2.http-response
+include::{snippets}/rest-docs-test-controller-test/rest-docs-test/http-request.adoc[]
+
+== Param Test
+==== 1.
+include::{snippets}/get-post/path-parameters.adoc[]
+==== 2.
+include::{snippets}/get-post/response-body.adoc[]
+==== 3.
+include::{snippets}/get-post/response-fields.adoc[]
+==== 4.
+include::{snippets}/rest-docs-test-controller-test/param-test/http-response.adoc[]
