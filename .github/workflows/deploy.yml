@@ -81,7 +81,7 @@ jobs:
 
       # CodeDelploy에 배포를 요청합니다.
       - name: Code Deploy 배포 요청
-        run: aws deploy create-deployment --application-name backend-deploy-group
+        run: aws deploy create-deployment --application-name test-app
           --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name backend-deploy-group
-          --s3-location bucket=backend-rex-bucket,bundleType=zip,key=spring-build.zip
+          --deployment-group-name test-app
+          --s3-location bucket=backend-coupon-bucket,bundleType=zip,key=spring-build.zip
