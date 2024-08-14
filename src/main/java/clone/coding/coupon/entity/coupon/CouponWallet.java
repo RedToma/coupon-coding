@@ -1,5 +1,6 @@
-package clone.coding.coupon.entity;
+package clone.coding.coupon.entity.coupon;
 
+import clone.coding.coupon.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CouponWallet extends BaseTimeEntity{
+public class CouponWallet extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,5 +28,6 @@ public class CouponWallet extends BaseTimeEntity{
 
     private LocalDateTime expiredAt;
 
-    private String couponNumber;
+    @Column(unique = true)
+    private String couponCode;
 }

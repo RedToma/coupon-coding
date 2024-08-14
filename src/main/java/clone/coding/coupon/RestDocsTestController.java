@@ -1,7 +1,7 @@
 package clone.coding.coupon;
 
 import clone.coding.coupon.dto.ResponseDto;
-import clone.coding.coupon.entity.Admin;
+import clone.coding.coupon.entity.admin.Admin;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;

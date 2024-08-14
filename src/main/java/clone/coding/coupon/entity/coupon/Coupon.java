@@ -1,6 +1,7 @@
-package clone.coding.coupon.entity;
+package clone.coding.coupon.entity.coupon;
 
 
+import clone.coding.coupon.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Coupons extends BaseTimeEntity {
+public class Coupon extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,6 +41,7 @@ public class Coupons extends BaseTimeEntity {
 
     private int maxCntPerCus;
 
+    @Column(unique = true)
     private String promotionCode;
 
     private int allocatedCnt;

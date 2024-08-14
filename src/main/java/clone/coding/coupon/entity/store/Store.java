@@ -1,5 +1,6 @@
-package clone.coding.coupon.entity;
+package clone.coding.coupon.entity.store;
 
+import clone.coding.coupon.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
