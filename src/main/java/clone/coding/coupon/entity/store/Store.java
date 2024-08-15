@@ -25,4 +25,8 @@ public class Store extends BaseTimeEntity {
     private String storeNum;
 
     private String address;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 }

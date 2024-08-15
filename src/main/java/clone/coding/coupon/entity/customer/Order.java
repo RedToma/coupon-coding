@@ -20,15 +20,21 @@ public class Order extends BaseTimeEntity {
     @Column(name = "order_id", updatable = false)
     private Long id;
 
-    private String payment;
+    @Enumerated(EnumType.STRING)
+    private PaymentType paymentType;
 
     private int totalAmount;
 
     private int discount;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusType statusType;
 
     private LocalDateTime orderTime;
 
     private LocalDateTime arrivalTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

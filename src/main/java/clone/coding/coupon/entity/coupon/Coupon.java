@@ -31,11 +31,16 @@ public class Coupon extends BaseTimeEntity {
 
     private Long minOrderPrice;
 
-    private String discountType;
+    @Enumerated(EnumType.STRING)
+    private DiscountType discountType;
 
-    private String issuerType;
+    @Enumerated(EnumType.STRING)
+    private IssuerType issuerType;
 
     private Long issuerCode;
+
+    //issuerType store일때 해당 지점에서만 쿠폰 사용가능하게
+    private Long storeId;
 
     private int maxCnt;
 

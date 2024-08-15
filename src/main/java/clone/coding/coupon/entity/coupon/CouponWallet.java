@@ -1,6 +1,7 @@
 package clone.coding.coupon.entity.coupon;
 
 import clone.coding.coupon.entity.BaseTimeEntity;
+import clone.coding.coupon.entity.customer.Customer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,4 +31,12 @@ public class CouponWallet extends BaseTimeEntity {
 
     @Column(unique = true)
     private String couponCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }
