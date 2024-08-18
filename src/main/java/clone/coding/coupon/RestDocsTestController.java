@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RestDocsTestController {
 
-    @PersistenceContext
-    private EntityManager em;
+//    @PersistenceContext
+//    private EntityManager em;
 
     @GetMapping("/restDocsTest")
     public String restDocsTestApi() {
@@ -29,7 +29,7 @@ public class RestDocsTestController {
     @GetMapping("/test")
     public String test2() {
         Admin admin = new Admin("운영자");
-        em.persist(admin);
+//        em.persist(admin);
         return "생성완료";
     }
 }
