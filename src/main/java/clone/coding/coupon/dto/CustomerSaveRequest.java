@@ -13,9 +13,11 @@ public class CustomerSaveRequest {
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
     private String email;
 
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=?<>]).{8,20}$", message = "비밀번호는 8자 이상 20자 이하이어야 하며, 대문자, 소문자, 숫자, 특수문자를 각각 최소 하나씩 포함해야 합니다.")
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
     private String password;
 
+    @Pattern(regexp = "^[A-Za-z0-9가-힣]{2,20}$", message = "2자 이상 20자 상하 한글 또는 영문 이용 닉네임을 설정해 주세요.")
     @NotBlank(message = "닉네임은 필수 입력 값입니다.")
     private String nickname;
 
