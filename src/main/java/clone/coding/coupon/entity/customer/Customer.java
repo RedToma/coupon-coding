@@ -1,6 +1,5 @@
 package clone.coding.coupon.entity.customer;
 
-import clone.coding.coupon.dto.CustomerSaveRequest;
 import clone.coding.coupon.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +31,10 @@ public class Customer extends BaseTimeEntity {
 
     public void changePw(String password) {
         this.password = password;
+    }
+
+    public void changeAddress(String address) {
+        this.address = address;
     }
 
 }
