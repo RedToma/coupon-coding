@@ -1,15 +1,68 @@
-== RestDocsTestController
-==== 1.http-response
-include::{snippets}/rest-docs-test-controller-test/rest-docs-test/http-response.adoc[]
-==== 2.http-response
-include::{snippets}/rest-docs-test-controller-test/rest-docs-test/http-request.adoc[]
-
-== Param Test
-==== 1.
-include::{snippets}/get-post/path-parameters.adoc[]
-==== 2.
-include::{snippets}/get-post/response-body.adoc[]
-==== 3.
-include::{snippets}/get-post/response-fields.adoc[]
-==== 4.
-include::{snippets}/rest-docs-test-controller-test/param-test/http-response.adoc[]
+== *CustomerController*
+=== *1. 회원가입*
+==== Request-Parameter
+include::{snippets}/customer-add/request-fields.adoc[]
+==== Response-Parameter
+include::{snippets}/customer-add/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/customer-add/http-request.adoc[]
+==== Http-Response
+include::{snippets}/customer-add/http-response.adoc[]
+'''
+=== *2. 로그인*
+==== Request-Parameter
+include::{snippets}/customer-login/request-fields.adoc[]
+==== Response-Parameter
+include::{snippets}/customer-login/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/customer-login/http-request.adoc[]
+==== Http-Response
+include::{snippets}/customer-login/http-response.adoc[]
+'''
+=== *3. 회원탈퇴*
+==== Request-PathParameter
+include::{snippets}/customer-remove/path-parameters.adoc[]
+==== Response-Parameter
+include::{snippets}/customer-remove/response-fields.adoc[]
+==== Http-Response
+include::{snippets}/customer-remove/http-response.adoc[]
+'''
+=== *4. 비밀번호 변경*
+==== Request-PathParameter
+include::{snippets}/customer-pw-change/path-parameters.adoc[]
+==== Request-Parameter
+include::{snippets}/customer-pw-change/request-fields.adoc[]
+==== Response-Parameter
+include::{snippets}/customer-pw-change/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/customer-pw-change/http-request.adoc[]
+==== Http-Response
+include::{snippets}/customer-pw-change/http-response.adoc[]
+'''
+=== *5. 주소 변경*
+==== Request-PathParameter
+include::{snippets}/customer-address-update/path-parameters.adoc[]
+==== Request-Parameter
+include::{snippets}/customer-address-update/query-parameters.adoc[]
+==== Response-Parameter
+include::{snippets}/customer-address-update/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/customer-address-update/http-request.adoc[]
+==== Http-Response
+include::{snippets}/customer-address-update/http-response.adoc[]
+'''
+=== *6. 이메일 중복 확인*
+==== Request-PathParameter
+include::{snippets}/customer-check-email-duplication/path-parameters.adoc[]
+==== Response-Parameter
+include::{snippets}/customer-check-email-duplication/response-fields.adoc[]
+==== Http-Response
+include::{snippets}/customer-check-email-duplication/http-response.adoc[]
+'''
+=== *7. 닉네임 중복 확인*
+==== Request-PathParameter
+include::{snippets}/customer-check-nickname-duplication/path-parameters.adoc[]
+==== Response-Parameter
+include::{snippets}/customer-check-nickname-duplication/response-fields.adoc[]
+==== Http-Response
+include::{snippets}/customer-check-nickname-duplication/http-response.adoc[]
