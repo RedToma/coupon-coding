@@ -2,13 +2,11 @@ package clone.coding.coupon.entity.customer;
 
 import clone.coding.coupon.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Customer extends BaseTimeEntity {
@@ -30,4 +28,13 @@ public class Customer extends BaseTimeEntity {
 
     @Column(unique = true)
     private String phoneNum;
+
+    public void changePw(String password) {
+        this.password = password;
+    }
+
+    public void changeAddress(String address) {
+        this.address = address;
+    }
+
 }

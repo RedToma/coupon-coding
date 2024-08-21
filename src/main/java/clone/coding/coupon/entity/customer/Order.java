@@ -3,7 +3,6 @@ package clone.coding.coupon.entity.customer;
 import clone.coding.coupon.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@AllArgsConstructor
+@Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseTimeEntity {
 
