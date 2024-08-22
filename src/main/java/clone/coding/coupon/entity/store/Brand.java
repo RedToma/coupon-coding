@@ -17,4 +17,8 @@ public class Brand extends BaseTimeEntity {
     private Long id;
 
     private String brandName;
+
+    public Brand(String brandName) {
+        this.brandName = brandName;
+    }
 }
