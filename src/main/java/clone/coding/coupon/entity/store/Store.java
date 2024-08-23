@@ -2,12 +2,12 @@ package clone.coding.coupon.entity.store;
 
 import clone.coding.coupon.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends BaseTimeEntity {
 
@@ -27,4 +27,10 @@ public class Store extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
     private Brand brand;
+
+    public void changeStoreInfo(String storeName, String storeNum, String address) {
+        this.storeName = storeName;
+        this.storeNum = storeNum;
+        this.address = address;
+    }
 }
