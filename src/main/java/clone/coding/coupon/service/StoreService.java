@@ -43,11 +43,11 @@ public class StoreService {
     }
 
     @Transactional
-    public void modifyStore(StoreSaveAndUpdateRequest storeSaveRequest, Long storeId) {
+    public void modifyStore(StoreSaveAndUpdateRequest storeUpdateRequest, Long storeId) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 지점 입니다."));
 
-        store.changeStoreInfo(storeSaveRequest.getStoreName(), storeSaveRequest.getStoreNum(), storeSaveRequest.getAddress());
+        store.changeStoreInfo(storeUpdateRequest);
     }
 
     @Transactional

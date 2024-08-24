@@ -3,12 +3,12 @@ package clone.coding.coupon.entity.customer;
 import clone.coding.coupon.entity.BaseTimeEntity;
 import clone.coding.coupon.entity.store.Menu;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderMenu extends BaseTimeEntity {
 
@@ -20,6 +20,10 @@ public class OrderMenu extends BaseTimeEntity {
     private int menuCnt;
 
     private int menuPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
