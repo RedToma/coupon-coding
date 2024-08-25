@@ -28,9 +28,11 @@ public class OrderMenuController {
      * @return
      */
     @PostMapping("/new/{customerId}")
-    public ApiResponse<Object> orderMenuAdd(@Valid @RequestBody OrderMenuSaveRequest orderMenuSaveRequest, BindingResult bindingResult, @PathVariable Long customerId) {
+    public ApiResponse<Object> orderMenuAdd(@Valid @RequestBody OrderMenuSaveRequest orderMenuSaveRequest,
+                                            BindingResult bindingResult,
+                                            @PathVariable Long customerId) {
         orderMenuService.addOrderMenu(orderMenuSaveRequest, customerId);
-        return ApiResponse.success();
+        return ApiResponse.success("장바구니에 추가 되었습니다.");
     }
 
     /**
@@ -42,5 +44,28 @@ public class OrderMenuController {
     public ApiResponse<List<OrderMenuFindAllResponse>> orderMenuList(@PathVariable Long customerId) {
         List<OrderMenuFindAllResponse> orderMenu = orderMenuService.findOrderMenu(customerId);
         return ApiResponse.success(orderMenu);
+    }
+
+    /**
+     * 장바구니 수량 변경
+     * @param menuCnt
+     * @param orderMenuId
+     * @return
+     */
+    @PatchMapping("/update/{orderMenuId}")
+    public ApiResponse<Object> orderMenuModify(@RequestParam int menuCnt, @PathVariable Long orderMenuId) {
+        orderMenuService.modifyOrderMenu(menuCnt, orderMenuId);
+        return ApiResponse.success("수량이 변경 되었습니다.");
+    }
+
+    /**
+     * 장바구니 선택 메뉴 삭제
+     * @param orderMenuId
+     * @return
+     */
+    @DeleteMapping("/remove/{orderMenuId}")
+    public ApiResponse<Object> orderMenuRemove(@PathVariable Long orderMenuId) {
+        orderMenuService.removeOrderMenu(orderMenuId);
+        return ApiResponse.success("선택한 메뉴가 삭제 되었습니다.");
     }
 }

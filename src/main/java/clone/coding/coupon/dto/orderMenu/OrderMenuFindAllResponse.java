@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderMenuFindAllResponse {
 
+    private Long orderMenuId;
+
     private Long menuId;
 
     private int menuCnt;
@@ -15,6 +17,7 @@ public class OrderMenuFindAllResponse {
     private int menuPrice;
 
     public OrderMenuFindAllResponse(OrderMenu orderMenu) {
+        orderMenuId = orderMenu.getId();
         menuId = orderMenu.getMenu().getId();
         menuCnt = orderMenu.getMenuCnt();
         menuPrice = orderMenu.getMenuPrice();

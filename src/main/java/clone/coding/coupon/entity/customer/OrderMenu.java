@@ -21,6 +21,9 @@ public class OrderMenu extends BaseTimeEntity {
 
     private int menuPrice;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -32,4 +35,16 @@ public class OrderMenu extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
+
+    public void changeMenuCnt(int cnt) {
+        menuCnt = cnt;
+    }
+
+    public void orderStatusToOrder() {
+        orderStatus = OrderStatus.ORDER;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }
