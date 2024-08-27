@@ -44,7 +44,7 @@ public class OrderService {
                 .totalAmount(totalPrice)
                 .discount(0)
                 .statusType(StatusType.PREPARING)
-                .orderTime(LocalDateTime.now())
+                .orderTime(LocalDateTime.now().withNano(0))
                 .customer(customer)
                 .build();
 
@@ -54,9 +54,64 @@ public class OrderService {
 
     }
 
-    public List<OrderListFindAllResponse> listOrder(Long customerId) { //(총 금액, 주문상태, 주문시간) 주문 테이블, (가게이름) 매장 테이블, (주문메뉴) 메뉴 테이블
+    public List<OrderListFindAllResponse> listOrder(Long customerId) {
         return orderRepository.customerOrderList(customerId).stream()
                 .map(OrderListFindAllResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void modifyOrderStatusToCooking(Long orderId, Long arrivalExpectTime) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        if (order.getStatusType() == StatusType.COOKING || order.getStatusType() == StatusType.DELIVERING
+                || order.getStatusType() == StatusType.DELIVERED || order.getStatusType() == StatusType.CANCEL) {
+            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        }
+        order.orderStatusChangeToCooking(arrivalExpectTime);
+    }
+
+    @Transactional
+    public void modifyOrderStatusToDelivering(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        if (order.getStatusType() == StatusType.DELIVERING || order.getStatusType() == StatusType.DELIVERED
+                || order.getStatusType() == StatusType.CANCEL) {
+            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        }
+        order.orderStatusChangeToDelivering();
+    }
+
+    @Transactional
+    public void modifyOrderStatusToDelivered(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        if (order.getStatusType() == StatusType.DELIVERED || order.getStatusType() == StatusType.CANCEL) {
+            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        }
+        order.orderStatusChangeToDelivered();
+    }
+
+    @Transactional
+    public void modifyOrderStatusToCancel(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        cancelCheck(order);
+    }
+
+    @Transactional
+    public void modifyOrderStatusToCustomerCancel(Long orderId, Long customerId) {
+        Order order = orderRepository.findByIdAndCustomerId(orderId, customerId)
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        cancelCheck(order);
+    }
+
+    private void cancelCheck(Order order) {
+        if (order.getStatusType() == StatusType.COOKING || order.getStatusType() == StatusType.DELIVERING || order.getStatusType() == StatusType.DELIVERED) {
+            throw new IllegalArgumentException("주문을 취소할 수 없습니다.");
+        } else if (order.getStatusType() == StatusType.CANCEL) {
+            throw new IllegalArgumentException("이미 취소된 주문 입니다.");
+        }
+        order.orderStatusChangeToCancel();
     }
 }
