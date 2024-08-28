@@ -1,5 +1,6 @@
-package clone.coding.coupon.global;
+package clone.coding.coupon.global.exception;
 
+import clone.coding.coupon.global.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

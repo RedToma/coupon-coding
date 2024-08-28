@@ -36,7 +36,7 @@ public class CustomerController {
      * @param bindingResult
      * @return
      */
-    @GetMapping("/customer/log-in")
+    @PostMapping("/login") //form-data or JSON 둘 중 어느 방식 쓸건지 고민(일단 JSON)
     public ApiResponse<Object> customerLoginDetails(@Valid @RequestBody CustomerLoginRequest customerLoginRequest,
                                                     BindingResult bindingResult) {
         customerService.findCustomer(customerLoginRequest);

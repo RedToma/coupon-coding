@@ -29,6 +29,8 @@ public class Customer extends BaseTimeEntity {
     @Column(unique = true)
     private String phoneNum;
 
+    private String role;
+
     public void changePw(String password) {
         this.password = password;
     }
