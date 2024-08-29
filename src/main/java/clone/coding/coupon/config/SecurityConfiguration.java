@@ -1,6 +1,7 @@
 package clone.coding.coupon.config;
 
 
+import clone.coding.coupon.global.jwt.JWTFilter;
 import clone.coding.coupon.global.jwt.JWTUtil;
 import clone.coding.coupon.global.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +46,12 @@ public class SecurityConfiguration {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/**").permitAll() //인증 필요 없는 곳
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // admin만 접근이 가능한 곳 지금은 아무거나 설정함
+                        .requestMatchers("/login", "/customer/sign-up").permitAll() //인증 필요 없는 곳
+//                        .requestMatchers("/admin/**").hasRole("ADMIN") // admin만 접근이 가능한 곳 지금은 아무거나 설정함
                         .anyRequest().authenticated());
+
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);

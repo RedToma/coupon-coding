@@ -30,7 +30,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        CustomerLoginRequest loginDto;
+        CustomerLoginRequest loginDto = new CustomerLoginRequest();
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();

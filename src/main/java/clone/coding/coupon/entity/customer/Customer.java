@@ -39,4 +39,9 @@ public class Customer extends BaseTimeEntity {
         this.address = address;
     }
 
+    public Customer(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 }
