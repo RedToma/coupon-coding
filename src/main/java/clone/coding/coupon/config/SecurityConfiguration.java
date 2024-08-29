@@ -1,9 +1,11 @@
 package clone.coding.coupon.config;
 
 
+import clone.coding.coupon.global.jwt.CustomLogoutFilter;
 import clone.coding.coupon.global.jwt.JWTFilter;
 import clone.coding.coupon.global.jwt.JWTUtil;
 import clone.coding.coupon.global.jwt.LoginFilter;
+import clone.coding.coupon.repository.RefreshRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 import static org.springframework.security.config.Customizer.*;
 
@@ -26,6 +29,7 @@ import static org.springframework.security.config.Customizer.*;
 public class SecurityConfiguration {
 
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final RefreshRepository refreshRepository;
     private final JWTUtil jwtUtil;
 
     @Bean
@@ -47,37 +51,21 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/customer/sign-up").permitAll() //인증 필요 없는 곳
+                        .requestMatchers("/reissue").permitAll()
 //                        .requestMatchers("/admin/**").hasRole("ADMIN") // admin만 접근이 가능한 곳 지금은 아무거나 설정함
                         .anyRequest().authenticated());
 
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), refreshRepository, jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http
+                .addFilterBefore(new CustomLogoutFilter(refreshRepository, jwtUtil), LogoutFilter.class);
 
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-//        http.csrf().disable().authorizeRequests((authorize) -> authorize
-//                        .requestMatchers("/**")
-//                        .permitAll()
-//                        .anyRequest()
-//                        .authenticated())
-//                .httpBasic(withDefaults())
-//                .formLogin(withDefaults());
-
         return http.build();
     }
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService() {
-//        UserDetails user = User.withUsername("user")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user);
-//    }
 }
