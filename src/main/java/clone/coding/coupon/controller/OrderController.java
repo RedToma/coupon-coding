@@ -4,6 +4,7 @@ import clone.coding.coupon.dto.order.OrderListFindAllResponse;
 import clone.coding.coupon.entity.customer.PaymentType;
 import clone.coding.coupon.global.ApiResponse;
 import clone.coding.coupon.service.OrderService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,23 +22,23 @@ public class OrderController {
     /**
      * 주문 생성
      * @param paymentType
-     * @param customerId
+     * @param request
      * @return
      */
-    @PostMapping("/new/{customerId}")
-    public ApiResponse<Object> orderAdd(@RequestParam PaymentType paymentType, @PathVariable Long customerId) {
-        orderService.addOrder(paymentType, customerId);
+    @PostMapping("/new")
+    public ApiResponse<Object> orderAdd(@RequestParam PaymentType paymentType, HttpServletRequest request) {
+        orderService.addOrder(paymentType, request);
         return ApiResponse.success("주문이 생성되었습니다.");
     }
 
     /**
      * 주문 목록 조회
-     * @param customerId
+     * @param request
      * @return
      */
-    @GetMapping("/list/{customerId}")
-    public ApiResponse<List<OrderListFindAllResponse>> orderList(@PathVariable Long customerId) {
-        List<OrderListFindAllResponse> orderListFindAllResponses = orderService.listOrder(customerId);
+    @GetMapping("/list")
+    public ApiResponse<List<OrderListFindAllResponse>> orderList(HttpServletRequest request) {
+        List<OrderListFindAllResponse> orderListFindAllResponses = orderService.listOrder(request);
         return ApiResponse.success(orderListFindAllResponses);
     }
 
@@ -89,12 +90,12 @@ public class OrderController {
     /**
      * 주문 취소(고객)
      * @param orderId
-     * @param customerId
+     * @param request
      * @return
      */
-    @PatchMapping("/customer-cancel-update/{orderId}/{customerId}")
-    public ApiResponse<Object> orderStatusToCustomerCancelModify(@PathVariable Long orderId, @PathVariable Long customerId) {
-        orderService.modifyOrderStatusToCustomerCancel(orderId, customerId);
+    @PatchMapping("/customer-cancel-update/{orderId}")
+    public ApiResponse<Object> orderStatusToCustomerCancelModify(@PathVariable Long orderId, HttpServletRequest request) {
+        orderService.modifyOrderStatusToCustomerCancel(orderId, request);
         return ApiResponse.success("주문이 취소 되었습니다.");
     }
 }

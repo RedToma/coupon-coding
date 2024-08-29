@@ -50,9 +50,8 @@ public class SecurityConfiguration {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/customer/sign-up").permitAll() //인증 필요 없는 곳
-                        .requestMatchers("/reissue").permitAll()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN") // admin만 접근이 가능한 곳 지금은 아무거나 설정함
+                        .requestMatchers("/login", "/customer/sign-up", "/reissue").permitAll() //인증 필요 없는 곳
+                        .requestMatchers("/brand/**", "/store/**", "/menu/**").permitAll()
                         .anyRequest().authenticated());
 
         http
