@@ -26,9 +26,9 @@ public class OrderMenuService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public void addOrderMenu(OrderMenuSaveRequest orderMenuSaveRequest, Long customerId) {
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new IllegalArgumentException("고객을 찾을 수 없습니다."));
+    public void addOrderMenu(OrderMenuSaveRequest orderMenuSaveRequest, String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         Menu menu = menuRepository.findById(orderMenuSaveRequest.getMenuId())
                 .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
@@ -43,11 +43,11 @@ public class OrderMenuService {
         orderMenuRepository.save(orderMenu);
     }
 
-    public List<OrderMenuFindAllResponse> findOrderMenu(Long customerId) {
-        customerRepository.findById(customerId)
-                .orElseThrow(() -> new IllegalArgumentException("고객을 찾을 수 없습니다."));
+    public List<OrderMenuFindAllResponse> findOrderMenu(String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
-        return orderMenuRepository.customerOrderMenuList(customerId, OrderStatus.NOT_ORDER).stream()
+        return orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER).stream()
                 .map(OrderMenuFindAllResponse::new)
                 .collect(Collectors.toList());
     }

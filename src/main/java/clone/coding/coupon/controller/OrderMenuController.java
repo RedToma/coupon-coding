@@ -6,6 +6,8 @@ import clone.coding.coupon.global.ApiResponse;
 import clone.coding.coupon.service.OrderMenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,28 +23,28 @@ public class OrderMenuController {
     private final OrderMenuService orderMenuService;
 
     /**
-     * 장바구니 생성
+     * 장바구니 추가
      * @param orderMenuSaveRequest
      * @param bindingResult
-     * @param customerId
+     * @param userDetails
      * @return
      */
-    @PostMapping("/new/{customerId}")
+    @PostMapping("/new")
     public ApiResponse<Object> orderMenuAdd(@Valid @RequestBody OrderMenuSaveRequest orderMenuSaveRequest,
                                             BindingResult bindingResult,
-                                            @PathVariable Long customerId) {
-        orderMenuService.addOrderMenu(orderMenuSaveRequest, customerId);
+                                            @AuthenticationPrincipal UserDetails userDetails) {
+        orderMenuService.addOrderMenu(orderMenuSaveRequest, userDetails.getUsername());
         return ApiResponse.success("장바구니에 추가 되었습니다.");
     }
 
     /**
      * 장바구니 조회
-     * @param customerId
+     * @param userDetails
      * @return
      */
-    @GetMapping("/list/{customerId}")
-    public ApiResponse<List<OrderMenuFindAllResponse>> orderMenuList(@PathVariable Long customerId) {
-        List<OrderMenuFindAllResponse> orderMenu = orderMenuService.findOrderMenu(customerId);
+    @GetMapping("/list")
+    public ApiResponse<List<OrderMenuFindAllResponse>> orderMenuList(@AuthenticationPrincipal UserDetails userDetails) {
+        List<OrderMenuFindAllResponse> orderMenu = orderMenuService.findOrderMenu(userDetails.getUsername());
         return ApiResponse.success(orderMenu);
     }
 

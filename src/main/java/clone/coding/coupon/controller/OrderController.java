@@ -4,8 +4,9 @@ import clone.coding.coupon.dto.order.OrderListFindAllResponse;
 import clone.coding.coupon.entity.customer.PaymentType;
 import clone.coding.coupon.global.ApiResponse;
 import clone.coding.coupon.service.OrderService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,23 +23,23 @@ public class OrderController {
     /**
      * 주문 생성
      * @param paymentType
-     * @param request
+     * @param userDetails
      * @return
      */
     @PostMapping("/new")
-    public ApiResponse<Object> orderAdd(@RequestParam PaymentType paymentType, HttpServletRequest request) {
-        orderService.addOrder(paymentType, request);
+    public ApiResponse<Object> orderAdd(@RequestParam PaymentType paymentType, @AuthenticationPrincipal UserDetails userDetails) {
+        orderService.addOrder(paymentType, userDetails.getUsername());
         return ApiResponse.success("주문이 생성되었습니다.");
     }
 
     /**
      * 주문 목록 조회
-     * @param request
+     * @param userDetails
      * @return
      */
     @GetMapping("/list")
-    public ApiResponse<List<OrderListFindAllResponse>> orderList(HttpServletRequest request) {
-        List<OrderListFindAllResponse> orderListFindAllResponses = orderService.listOrder(request);
+    public ApiResponse<List<OrderListFindAllResponse>> orderList(@AuthenticationPrincipal UserDetails userDetails) {
+        List<OrderListFindAllResponse> orderListFindAllResponses = orderService.listOrder(userDetails.getUsername());
         return ApiResponse.success(orderListFindAllResponses);
     }
 
@@ -90,12 +91,12 @@ public class OrderController {
     /**
      * 주문 취소(고객)
      * @param orderId
-     * @param request
+     * @param userDetails
      * @return
      */
     @PatchMapping("/customer-cancel-update/{orderId}")
-    public ApiResponse<Object> orderStatusToCustomerCancelModify(@PathVariable Long orderId, HttpServletRequest request) {
-        orderService.modifyOrderStatusToCustomerCancel(orderId, request);
+    public ApiResponse<Object> orderStatusToCustomerCancelModify(@PathVariable Long orderId, @AuthenticationPrincipal UserDetails userDetails) {
+        orderService.modifyOrderStatusToCustomerCancel(orderId, userDetails.getUsername());
         return ApiResponse.success("주문이 취소 되었습니다.");
     }
 }

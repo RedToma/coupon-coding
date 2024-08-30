@@ -2,11 +2,9 @@ package clone.coding.coupon.service;
 
 import clone.coding.coupon.dto.order.OrderListFindAllResponse;
 import clone.coding.coupon.entity.customer.*;
-import clone.coding.coupon.global.jwt.JWTExtraction;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
 import clone.coding.coupon.repository.OrderRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +18,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final JWTExtraction jwtExtraction;
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final OrderMenuRepository orderMenuRepository;
 
     @Transactional
-    public void addOrder(PaymentType paymentType, HttpServletRequest request) {
-        Customer customer = jwtExtraction.extractCustomer(request);
+    public void addOrder(PaymentType paymentType, String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
 
@@ -56,8 +54,9 @@ public class OrderService {
 
     }
 
-    public List<OrderListFindAllResponse> listOrder(HttpServletRequest request) {
-        Customer customer = jwtExtraction.extractCustomer(request);
+    public List<OrderListFindAllResponse> listOrder(String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         return orderRepository.customerOrderList(customer.getId()).stream()
                 .map(OrderListFindAllResponse::new)
@@ -104,8 +103,9 @@ public class OrderService {
     }
 
     @Transactional
-    public void modifyOrderStatusToCustomerCancel(Long orderId, HttpServletRequest request) {
-        Customer customer = jwtExtraction.extractCustomer(request);
+    public void modifyOrderStatusToCustomerCancel(Long orderId, String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         Order order = orderRepository.findByIdAndCustomerId(orderId, customer.getId())
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
