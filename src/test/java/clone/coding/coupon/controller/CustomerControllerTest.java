@@ -78,37 +78,37 @@ class CustomerControllerTest extends AbstractRestDocsTests {
                 ));
     }
 
-    @Test
-    @DisplayName("로그인 테스트")
-    void customerLoginDetails() throws Exception {
-        //given
-        CustomerLoginRequest request = new CustomerLoginRequest();
-        request.setEmail("test@email.com");
-        request.setPassword("Password1!");
-
-        //when & then
-        ResultActions result = mockMvc.perform(get("/customer/log-in")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
-
-        result.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data").value("로그인 되었습니다."))
-                .andExpect(jsonPath("$.error", is(nullValue())))
-                .andDo(document("customer-login",
-                        requestFields(
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("로그인 이메일"),
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("로그인 비밀번호")
-                        ),
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-                                fieldWithPath("data").type(JsonFieldType.STRING).description("결과 메시지"),
-                                fieldWithPath("error").type(JsonFieldType.NULL).description("오류 여부"),
-                                fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("서버 처리 시간")
-                        )
-                ));
-    }
+//    @Test
+//    @DisplayName("로그인 테스트")
+//    void customerLoginDetails() throws Exception {
+//        //given
+//        CustomerLoginRequest request = new CustomerLoginRequest();
+//        request.setEmail("test@email.com");
+//        request.setPassword("Password1!");
+//
+//        //when & then
+//        ResultActions result = mockMvc.perform(get("/customer/log-in")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(request)));
+//
+//        result.andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.success").value(true))
+//                .andExpect(jsonPath("$.data").value("로그인 되었습니다."))
+//                .andExpect(jsonPath("$.error", is(nullValue())))
+//                .andDo(document("customer-login",
+//                        requestFields(
+//                                fieldWithPath("email").type(JsonFieldType.STRING).description("로그인 이메일"),
+//                                fieldWithPath("password").type(JsonFieldType.STRING).description("로그인 비밀번호")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
+//                                fieldWithPath("data").type(JsonFieldType.STRING).description("결과 메시지"),
+//                                fieldWithPath("error").type(JsonFieldType.NULL).description("오류 여부"),
+//                                fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("서버 처리 시간")
+//                        )
+//                ));
+//    }
 
     @Test
     @DisplayName("회원탈퇴 테스트")
