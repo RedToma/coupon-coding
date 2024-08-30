@@ -27,6 +27,7 @@ public class CustomerService {
                 .nickname(customerSaveRequest.getNickname())
                 .address(customerSaveRequest.getAddress())
                 .phoneNum(customerSaveRequest.getPhoneNum())
+                .role("ROLE_ADMIN")
                 .build();
 
         customerRepository.save(customer);

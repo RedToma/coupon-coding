@@ -29,6 +29,8 @@ public class Customer extends BaseTimeEntity {
     @Column(unique = true)
     private String phoneNum;
 
+    private String role;
+
     public void changePw(String password) {
         this.password = password;
     }
@@ -37,4 +39,9 @@ public class Customer extends BaseTimeEntity {
         this.address = address;
     }
 
+    public Customer(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 }
