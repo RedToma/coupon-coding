@@ -7,6 +7,8 @@ import clone.coding.coupon.global.ApiResponse;
 import clone.coding.coupon.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,12 +47,12 @@ public class CustomerController {
 
     /**
      * 회원탈퇴
-     * @param id
+     * @param userDetails
      * @return
      */
-    @DeleteMapping("/customer/withdraw/{id}")
-    public ApiResponse<Object> customerRemove(@PathVariable Long id) {
-        customerService.removeCustomer(id);
+    @DeleteMapping("/customer/withdraw")
+    public ApiResponse<Object> customerRemove(@AuthenticationPrincipal UserDetails userDetails) {
+        customerService.removeCustomer(userDetails.getUsername());
         return ApiResponse.success("회원탈퇴 되었습니다.");
     }
 
@@ -58,26 +60,26 @@ public class CustomerController {
      * 비밀번호 변경
      * @param customerPwUpdateRequest
      * @param bindingResult
-     * @param id
+     * @param userDetails
      * @return
      */
-    @PatchMapping("/customer/info/pw-change/{id}")
+    @PatchMapping("/customer/info/pw-change")
     public ApiResponse<Object> customerPwModify(@Valid @RequestBody CustomerPwUpdateRequest customerPwUpdateRequest,
                                                 BindingResult bindingResult,
-                                                @PathVariable Long id) {
-        customerService.modifyCustomerPw(customerPwUpdateRequest, id);
+                                                @AuthenticationPrincipal UserDetails userDetails) {
+        customerService.modifyCustomerPw(customerPwUpdateRequest, userDetails.getUsername());
         return ApiResponse.success("비밀번호가 변경되었습니다.");
     }
 
     /**
      * 주소 변경
      * @param address
-     * @param id
+     * @param userDetails
      * @return
      */
-    @PatchMapping("/customer/info/address/{id}")
-    public ApiResponse<Object> customerAddressModify(@RequestParam String address, @PathVariable Long id) {
-        customerService.modifyCustomerAddress(address, id);
+    @PatchMapping("/customer/info/address")
+    public ApiResponse<Object> customerAddressModify(@RequestParam String address, @AuthenticationPrincipal UserDetails userDetails) {
+        customerService.modifyCustomerAddress(address, userDetails.getUsername());
         return ApiResponse.success("주소가 변경되었습니다.");
     }
 

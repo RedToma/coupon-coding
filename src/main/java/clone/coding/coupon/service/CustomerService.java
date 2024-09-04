@@ -6,6 +6,7 @@ import clone.coding.coupon.dto.customer.CustomerSaveRequest;
 import clone.coding.coupon.entity.customer.Customer;
 import clone.coding.coupon.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,23 +44,23 @@ public class CustomerService {
     }
 
     @Transactional
-    public void removeCustomer(Long id) {
-        Customer customer = customerRepository.findById(id)
+    public void removeCustomer(String email) {
+        Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         customerRepository.delete(customer);
     }
 
     @Transactional
-    public void modifyCustomerPw(CustomerPwUpdateRequest customerPwUpdateRequest, Long id) {
-        Customer customer = customerRepository.findById(id)
+    public void modifyCustomerPw(CustomerPwUpdateRequest customerPwUpdateRequest, String email) {
+        Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         customer.changePw(encoder.encode(customerPwUpdateRequest.getPassword()));
     }
 
     @Transactional
-    public void modifyCustomerAddress(String address, Long id) {
-        Customer customer = customerRepository.findById(id)
+    public void modifyCustomerAddress(String address, String email) {
+        Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         customer.changeAddress(address);
