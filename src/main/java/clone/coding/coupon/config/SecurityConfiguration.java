@@ -50,8 +50,8 @@ public class SecurityConfiguration {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/customer/sign-up", "/reissue").permitAll() //인증 필요 없는 곳
-                        .requestMatchers("/brand/**", "/store/**", "/menu/**").permitAll()
+                        .requestMatchers("/login", "/customer/sign-up", "/reissue").permitAll()
+                        .requestMatchers("/brand/**", "/store/**", "/menu/**", "/admin/**", "/coupon/**").permitAll()
                         .anyRequest().authenticated());
 
         http
