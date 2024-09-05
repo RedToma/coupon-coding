@@ -27,7 +27,6 @@ public class CouponWallet extends BaseTimeEntity {
 
     private LocalDateTime expiredAt;
 
-    @Column(unique = true)
     private String couponCode;
 
     @ManyToOne(fetch = FetchType.LAZY)

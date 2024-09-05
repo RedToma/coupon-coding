@@ -20,7 +20,7 @@ public class AdminController {
     @PostMapping("/new")
     public ApiResponse<Object> adminAdd(@RequestParam String type) {
         adminService.addAdmin(type);
-        return ApiResponse.success();
+        return ApiResponse.success("관리자가 생성 되었습니다.");
     }
 
     /**
@@ -31,6 +31,6 @@ public class AdminController {
     @DeleteMapping("/remove/{adminId}")
     public ApiResponse<Object> adminRemove(@PathVariable Long adminId) {
         adminService.removeAdmin(adminId);
-        return ApiResponse.success();
+        return ApiResponse.success("관리자가 삭제 되었습니다.");
     }
 }

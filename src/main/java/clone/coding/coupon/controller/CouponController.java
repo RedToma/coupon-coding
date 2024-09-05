@@ -17,12 +17,41 @@ public class CouponController {
 
     private final CouponService couponService;
 
-    @PostMapping("/admin/issuer/{adminId}")
-    public ApiResponse<Object> couponAdminAdd(@Valid @RequestBody CouponSaveRequest couponSaveRequest,
-                                              BindingResult bindingResult,
-                                              @PathVariable Long adminId) {
-        couponService.addAdminCoupon(couponSaveRequest, adminId);
-        return ApiResponse.success("쿠폰이 정상적으로 발급되었습니다.");
+    /**
+     * 어드민 쿠폰 발행
+     * @param couponSaveRequest
+     * @param bindingResult
+     * @return
+     */
+    @PostMapping("/admin/issuer")
+    public ApiResponse<Object> couponAdminAdd(@Valid @RequestBody CouponSaveRequest couponSaveRequest, BindingResult bindingResult) {
+        couponService.addAdminCoupon(couponSaveRequest);
+        return ApiResponse.success("어드민 쿠폰이 정상적으로 발급되었습니다.");
+    }
+
+
+    /**
+     * 브랜드 쿠폰 발행
+     * @param couponSaveRequest
+     * @param bindingResult
+     * @return
+     */
+    @PostMapping("/brand/issuer")
+    public ApiResponse<Object> couponBrandAdd(@Valid @RequestBody CouponSaveRequest couponSaveRequest, BindingResult bindingResult) {
+        couponService.addBrandCoupon(couponSaveRequest);
+        return ApiResponse.success("브랜드 쿠폰이 정상적으로 발급되었습니다.");
+    }
+
+    /**
+     * 스토어 쿠폰 발행
+     * @param couponSaveRequest
+     * @param bindingResult
+     * @return
+     */
+    @PostMapping("/store/issuer")
+    public ApiResponse<Object> couponStoreAdd(@Valid @RequestBody CouponSaveRequest couponSaveRequest, BindingResult bindingResult) {
+        couponService.addStoreCoupon(couponSaveRequest);
+        return ApiResponse.success("스토어 쿠폰이 정상적으로 발급되었습니다.");
     }
 
 }

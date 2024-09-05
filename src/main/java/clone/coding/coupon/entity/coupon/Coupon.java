@@ -56,4 +56,6 @@ public class Coupon extends BaseTimeEntity {
     private String promotionCode;
 
     private int allocatedCnt;
+
+    private boolean available;
 }

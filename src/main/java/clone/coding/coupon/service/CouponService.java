@@ -16,8 +16,20 @@ public class CouponService {
     private final CouponRepository couponRepository;
 
     @Transactional
-    public void addAdminCoupon(CouponSaveRequest couponSaveRequest, Long adminId) {
-        Coupon coupon = couponRedemption.adminCouponIssuing(couponSaveRequest, adminId);
+    public void addAdminCoupon(CouponSaveRequest couponSaveRequest) {
+        Coupon coupon = couponRedemption.adminCouponIssuing(couponSaveRequest);
+        couponRepository.save(coupon);
+    }
+
+    @Transactional
+    public void addBrandCoupon(CouponSaveRequest couponSaveRequest) {
+        Coupon coupon = couponRedemption.brandCouponIssuing(couponSaveRequest);
+        couponRepository.save(coupon);
+    }
+
+    @Transactional
+    public void addStoreCoupon(CouponSaveRequest couponSaveRequest) {
+        Coupon coupon = couponRedemption.storeCouponIssuing(couponSaveRequest);
         couponRepository.save(coupon);
     }
 }
