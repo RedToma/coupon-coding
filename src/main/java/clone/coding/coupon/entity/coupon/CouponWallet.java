@@ -3,14 +3,14 @@ package clone.coding.coupon.entity.coupon;
 import clone.coding.coupon.entity.BaseTimeEntity;
 import clone.coding.coupon.entity.customer.Customer;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CouponWallet extends BaseTimeEntity {
 
@@ -36,4 +36,8 @@ public class CouponWallet extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 }

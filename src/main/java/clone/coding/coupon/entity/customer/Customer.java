@@ -1,8 +1,12 @@
 package clone.coding.coupon.entity.customer;
 
 import clone.coding.coupon.entity.BaseTimeEntity;
+import clone.coding.coupon.entity.coupon.CouponWallet;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,6 +34,15 @@ public class Customer extends BaseTimeEntity {
     private String phoneNum;
 
     private String role;
+
+    @OneToMany(mappedBy = "customer")
+    @Builder.Default
+    private List<CouponWallet> couponWallets = new ArrayList<>();
+
+    public void addCouponWallets(CouponWallet couponWallet) {
+        couponWallets.add(couponWallet);
+        couponWallet.setCustomer(this);
+    }
 
     public void changePw(String password) {
         this.password = password;

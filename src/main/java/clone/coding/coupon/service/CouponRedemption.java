@@ -109,12 +109,7 @@ public class CouponRedemption {
     }
 
 
-    private TimePolicy timePolicySet(CouponSaveRequest couponSaveRequest) {
-        TimePolicy timePolicy;
-
-        if (couponSaveRequest.isPolicyStatus()) timePolicy = new TimePolicy(true, couponSaveRequest.getStartTime(), couponSaveRequest.getEndTime());
-        else timePolicy = new TimePolicy(false, null, null);
-
-        return timePolicy;
+    private TimePolicy timePolicySet(CouponSaveRequest couponSaveRequest) { // policyStatus 보존?(없애는게 맞는듯) 시간정책 안쓰면 그냥 00:00:00 ~ 23:59:59
+        return new TimePolicy(couponSaveRequest.getStartTime(), couponSaveRequest.getEndTime());
     }
 }

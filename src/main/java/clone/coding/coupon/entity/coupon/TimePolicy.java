@@ -12,14 +12,11 @@ import java.time.LocalTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TimePolicy {
 
-    private boolean policyStatus;
-
     private LocalTime startTime;
 
     private LocalTime endTime;
 
-    public TimePolicy(boolean policyStatus, LocalTime startTime, LocalTime endTime) {
-        this.policyStatus = policyStatus;
+    public TimePolicy(LocalTime startTime, LocalTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }

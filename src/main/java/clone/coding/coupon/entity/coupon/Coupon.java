@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -58,4 +57,12 @@ public class Coupon extends BaseTimeEntity {
     private int allocatedCnt;
 
     private boolean available;
+
+    public void couponExpired() {
+        available = false;
+    }
+
+    public void couponIssuedComplete() {
+        allocatedCnt++;
+    }
 }

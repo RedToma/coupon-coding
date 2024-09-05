@@ -30,8 +30,6 @@ public class CouponSaveRequest {
     @NotNull(message = "쿠폰 사용가능 종료일자를 입력해주세요. (년-월-일)")
     private LocalDateTime expiredAt;
 
-    private boolean policyStatus;
-
     private LocalTime startTime;
 
     private LocalTime endTime;
