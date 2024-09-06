@@ -37,6 +37,10 @@ public class CouponWallet extends BaseTimeEntity {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    public void customerInfoUpdate(Customer customer) {
+        this.customer = customer;
+    }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }

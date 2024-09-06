@@ -39,7 +39,7 @@ public class CouponRedemption {
                     .issuerCode(couponSaveRequest.getIssuerCode())
                     .maxCnt(couponSaveRequest.getMaxCnt())
                     .maxCntPerCus(couponSaveRequest.getMaxCntPerCus())
-                    .promotionCode(String.valueOf(UUID.randomUUID()))
+                    .promotionCode(UUID.randomUUID().toString())
                     .allocatedCnt(0)
                     .available(true)
                     .build();
@@ -68,7 +68,7 @@ public class CouponRedemption {
                 .brandId(admin.getBrandId())
                 .maxCnt(couponSaveRequest.getMaxCnt())
                 .maxCntPerCus(couponSaveRequest.getMaxCntPerCus())
-                .promotionCode(String.valueOf(UUID.randomUUID()))
+                .promotionCode(UUID.randomUUID().toString())
                 .allocatedCnt(0)
                 .available(true)
                 .build();
@@ -97,7 +97,7 @@ public class CouponRedemption {
                     .storeId(store.getId())
                     .maxCnt(couponSaveRequest.getMaxCnt())
                     .maxCntPerCus(couponSaveRequest.getMaxCntPerCus())
-                    .promotionCode(String.valueOf(UUID.randomUUID()))
+                    .promotionCode(UUID.randomUUID().toString())
                     .allocatedCnt(0)
                     .available(true)
                     .build();
