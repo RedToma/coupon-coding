@@ -54,7 +54,7 @@ public class CouponWalletService {
 
         CouponWallet couponWallet = CouponWallet.builder()
                 .useYn(false)
-                .startAt(LocalDateTime.now()) // 발급받은 시간을 넣는게 맞을지 아니면 쿠폰 테이블 내 시작일자를 넣는게 맞을지?
+                .startAt(LocalDateTime.now().withNano(0)) // 발급받은 시간을 넣는게 맞을지 아니면 쿠폰 테이블 내 시작일자를 넣는게 맞을지?
                 .expiredAt(coupon.getExpiredAt())
                 .couponCode(coupon.getPromotionCode())
                 .coupon(coupon)

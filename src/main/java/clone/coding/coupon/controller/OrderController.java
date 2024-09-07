@@ -1,12 +1,16 @@
 package clone.coding.coupon.controller;
 
 import clone.coding.coupon.dto.order.OrderListFindAllResponse;
+import clone.coding.coupon.dto.order.OrderMenuAndCouponFindAllResponse;
+import clone.coding.coupon.dto.order.OrderSaveRequest;
 import clone.coding.coupon.entity.customer.PaymentType;
 import clone.coding.coupon.global.ApiResponse;
 import clone.coding.coupon.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +26,29 @@ public class OrderController {
 
     /**
      * 주문 생성
-     * @param paymentType
+     * @param orderSaveRequest
      * @param userDetails
      * @return
      */
     @PostMapping("/new")
-    public ApiResponse<Object> orderAdd(@RequestParam PaymentType paymentType, @AuthenticationPrincipal UserDetails userDetails) {
-        orderService.addOrder(paymentType, userDetails.getUsername());
+    public ApiResponse<Object> orderAdd(@Valid @RequestBody OrderSaveRequest orderSaveRequest,
+                                        BindingResult bindingResult,
+                                        @AuthenticationPrincipal UserDetails userDetails) {
+        // 사용하려는 쿠폰 번호, 결제타입, 총 가격 JSON으로 넘기기
+        // 발급주체타입확인 고정금액, 퍼센티지 금액 처리 조건 나누기
+        orderService.addOrder(orderSaveRequest, userDetails.getUsername());
         return ApiResponse.success("주문이 생성되었습니다.");
+    }
+
+    /**
+     * 주문하기(주문생성 전)
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/ordering")
+    public ApiResponse<OrderMenuAndCouponFindAllResponse> ordering(@AuthenticationPrincipal UserDetails userDetails) { // 내가 주문할 음식 목록과, 사용 가능한 쿠폰 목록 보여주기
+        OrderMenuAndCouponFindAllResponse response = orderService.listPurchaseOrder(userDetails.getUsername());
+        return ApiResponse.success(response);
     }
 
     /**

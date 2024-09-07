@@ -10,7 +10,7 @@ public class OrderSaveRequest {
 
     private PaymentType paymentType;
 
-    private int totalAmount;
+    private Long couponWalletId;
 
-    private int discount;
+    private int totalAmount;
 }
