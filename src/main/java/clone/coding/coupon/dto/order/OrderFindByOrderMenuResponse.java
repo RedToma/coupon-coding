@@ -10,10 +10,13 @@ public class OrderFindByOrderMenuResponse {
 
     private String menuName;
 
+    private int menuCnt;
+
     private int menuPrice;
 
     public OrderFindByOrderMenuResponse(OrderMenu orderMenu) {
         this.menuName = orderMenu.getMenu().getMenuName();
+        this.menuCnt = orderMenu.getMenuCnt();
         this.menuPrice = orderMenu.getMenu().getPrice();
     }
 }

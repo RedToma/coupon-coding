@@ -41,12 +41,6 @@ public class OrderService {
         List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
         if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
 
-        orderMenus.stream()
-                .peek(orderMenu -> {
-                    if (orderMenu.getMenuCnt() <= 0) throw new IllegalArgumentException("주문 오류 [주문을 생성할 수 없습니다.]");
-                    orderMenu.orderStatusToOrder();
-                }); //확인
-
         CouponWallet myCoupon = couponWalletRepository.findById(orderSaveRequest.getCouponWalletId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
 
@@ -60,9 +54,6 @@ public class OrderService {
 
         myCoupon.couponUseProcess();
 
-        // 여기에다 총 금액, 할인금액 계산하기
-        // 쿠폰id 번호 넘겨받고 해당 쿠폰 사용처리하기
-
         Order order = Order.builder()
                 .paymentType(orderSaveRequest.getPaymentType())
                 .totalAmount(totalPrice)
@@ -72,13 +63,40 @@ public class OrderService {
                 .customer(customer)
                 .build();
 
-        for (OrderMenu orderMenu : orderMenus) order.addOrderMenus(orderMenu);
+        for (OrderMenu orderMenu : orderMenus) {
+            orderMenu.orderStatusToOrder();
+            order.addOrderMenus(orderMenu);
+        }
 
         orderRepository.save(order);
-
     }
 
-    public OrderMenuAndCouponFindAllResponse listPurchaseOrder(String email) { // 내가 주문할 음식 목록과, 사용 가능한 쿠폰 목록 보여주기
+    @Transactional
+    public void addOrderNotCoupon(OrderSaveRequest orderSaveRequest, String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+
+        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
+        if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
+
+        Order order = Order.builder()
+                .paymentType(orderSaveRequest.getPaymentType())
+                .totalAmount(orderSaveRequest.getTotalAmount())
+                .discount(0)
+                .statusType(StatusType.PREPARING)
+                .orderTime(LocalDateTime.now().withNano(0))
+                .customer(customer)
+                .build();
+
+        for (OrderMenu orderMenu : orderMenus) {
+            orderMenu.orderStatusToOrder();
+            order.addOrderMenus(orderMenu);
+        }
+
+        orderRepository.save(order);
+    }
+
+    public OrderMenuAndCouponFindAllResponse listPurchaseOrder(String email) {
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
@@ -87,7 +105,7 @@ public class OrderService {
 
         int totalPrice = orderMenus.stream()
                 .mapToInt(i -> i.getMenuCnt() * i.getMenuPrice())
-                .sum(); //확인
+                .sum();
 
         List<CouponWallet> usableCoupons = customer.getCouponWallets().stream()
                 .filter(couponWallet -> orderMenus.stream()
@@ -186,15 +204,5 @@ public class OrderService {
         }
 
         return false;
-    }
-
-    private int totalPrice(List<OrderMenu> orderMenus) {
-        return orderMenus.stream()
-                .peek(orderMenu -> {
-                    if (orderMenu.getMenuCnt() <= 0) throw new IllegalArgumentException("주문 오류 [주문을 생성할 수 없습니다.]");
-                    orderMenu.orderStatusToOrder();
-                })
-                .mapToInt(i -> i.getMenuCnt() * i.getMenuPrice())
-                .sum();
     }
 }

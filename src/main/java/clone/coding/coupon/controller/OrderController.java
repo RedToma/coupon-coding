@@ -34,9 +34,9 @@ public class OrderController {
     public ApiResponse<Object> orderAdd(@Valid @RequestBody OrderSaveRequest orderSaveRequest,
                                         BindingResult bindingResult,
                                         @AuthenticationPrincipal UserDetails userDetails) {
-        // 사용하려는 쿠폰 번호, 결제타입, 총 가격 JSON으로 넘기기
-        // 발급주체타입확인 고정금액, 퍼센티지 금액 처리 조건 나누기
-        orderService.addOrder(orderSaveRequest, userDetails.getUsername());
+        if (orderSaveRequest.getCouponWalletId() != null) orderService.addOrder(orderSaveRequest, userDetails.getUsername());
+        else orderService.addOrderNotCoupon(orderSaveRequest, userDetails.getUsername());
+
         return ApiResponse.success("주문이 생성되었습니다.");
     }
 
@@ -46,7 +46,7 @@ public class OrderController {
      * @return
      */
     @GetMapping("/ordering")
-    public ApiResponse<OrderMenuAndCouponFindAllResponse> ordering(@AuthenticationPrincipal UserDetails userDetails) { // 내가 주문할 음식 목록과, 사용 가능한 쿠폰 목록 보여주기
+    public ApiResponse<OrderMenuAndCouponFindAllResponse> ordering(@AuthenticationPrincipal UserDetails userDetails) {
         OrderMenuAndCouponFindAllResponse response = orderService.listPurchaseOrder(userDetails.getUsername());
         return ApiResponse.success(response);
     }
