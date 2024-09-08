@@ -52,6 +52,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/customer/sign-up", "/reissue").permitAll()
                         .requestMatchers("/brand/**", "/store/**", "/menu/**", "/admin/**", "/coupon/**").permitAll()
+                        .requestMatchers("/order/store/list/{storeId}").permitAll()
                         .requestMatchers("/couponwallet/couponcode/create").permitAll()
                         .anyRequest().authenticated());
 

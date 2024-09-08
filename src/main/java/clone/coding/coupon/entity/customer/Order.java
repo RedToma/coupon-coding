@@ -1,6 +1,7 @@
 package clone.coding.coupon.entity.customer;
 
 import clone.coding.coupon.entity.BaseTimeEntity;
+import clone.coding.coupon.entity.store.Store;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -45,6 +46,10 @@ public class Order extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     public void addOrderMenus(OrderMenu orderMenu) {
         orderMenus.add(orderMenu);

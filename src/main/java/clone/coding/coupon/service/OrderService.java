@@ -1,11 +1,13 @@
 package clone.coding.coupon.service;
 
+import clone.coding.coupon.dto.order.OrderFindAllByStoreResponse;
 import clone.coding.coupon.dto.order.OrderListFindAllResponse;
 import clone.coding.coupon.dto.order.OrderMenuAndCouponFindAllResponse;
 import clone.coding.coupon.dto.order.OrderSaveRequest;
 import clone.coding.coupon.entity.coupon.CouponWallet;
 import clone.coding.coupon.entity.coupon.TimePolicy;
 import clone.coding.coupon.entity.customer.*;
+import clone.coding.coupon.entity.store.Store;
 import clone.coding.coupon.repository.CouponWalletRepository;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
@@ -54,6 +56,9 @@ public class OrderService {
 
         myCoupon.couponUseProcess();
 
+        OrderMenu orderMenuInfo = orderMenus.stream().findFirst().get();
+        Store store = orderMenuInfo.getMenu().getStore();
+
         Order order = Order.builder()
                 .paymentType(orderSaveRequest.getPaymentType())
                 .totalAmount(totalPrice)
@@ -61,6 +66,7 @@ public class OrderService {
                 .statusType(StatusType.PREPARING)
                 .orderTime(LocalDateTime.now().withNano(0))
                 .customer(customer)
+                .store(store)
                 .build();
 
         for (OrderMenu orderMenu : orderMenus) {
@@ -79,6 +85,9 @@ public class OrderService {
         List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
         if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
 
+        OrderMenu orderMenuInfo = orderMenus.stream().findFirst().get();
+        Store store = orderMenuInfo.getMenu().getStore();
+
         Order order = Order.builder()
                 .paymentType(orderSaveRequest.getPaymentType())
                 .totalAmount(orderSaveRequest.getTotalAmount())
@@ -86,6 +95,7 @@ public class OrderService {
                 .statusType(StatusType.PREPARING)
                 .orderTime(LocalDateTime.now().withNano(0))
                 .customer(customer)
+                .store(store)
                 .build();
 
         for (OrderMenu orderMenu : orderMenus) {
@@ -121,6 +131,12 @@ public class OrderService {
 
         return orderRepository.customerOrderList(customer.getId()).stream()
                 .map(OrderListFindAllResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<OrderFindAllByStoreResponse> listStoreOrder(Long storeId) {
+        return orderRepository.findRecentOrdersByStore(storeId).stream()
+                .map(OrderFindAllByStoreResponse::new)
                 .collect(Collectors.toList());
     }
 

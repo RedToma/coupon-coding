@@ -13,6 +13,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o JOIN FETCH o.orderMenus om WHERE o.customer.id = :customerId")
     List<Order> customerOrderList(@Param("customerId") Long customerId);
 
+    @Query("SELECT o FROM Order o WHERE o.store.id = :storeId ORDER BY o.orderTime DESC")
+    List<Order> findRecentOrdersByStore(@Param("storeId") Long storeId);
+
     Optional<Order> findByIdAndCustomerId(Long orderId, Long customerId);
 
 }

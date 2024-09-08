@@ -1,5 +1,6 @@
 package clone.coding.coupon.controller;
 
+import clone.coding.coupon.dto.order.OrderFindAllByStoreResponse;
 import clone.coding.coupon.dto.order.OrderListFindAllResponse;
 import clone.coding.coupon.dto.order.OrderMenuAndCouponFindAllResponse;
 import clone.coding.coupon.dto.order.OrderSaveRequest;
@@ -60,6 +61,17 @@ public class OrderController {
     public ApiResponse<List<OrderListFindAllResponse>> orderList(@AuthenticationPrincipal UserDetails userDetails) {
         List<OrderListFindAllResponse> orderListFindAllResponses = orderService.listOrder(userDetails.getUsername());
         return ApiResponse.success(orderListFindAllResponses);
+    }
+
+    /**
+     * 주문 목록 조회(가게 사장)
+     * @param storeId
+     * @return
+     */
+    @GetMapping("/store/list/{storeId}")
+    public ApiResponse<List<OrderFindAllByStoreResponse>> orderListStore(@PathVariable Long storeId) {
+        List<OrderFindAllByStoreResponse> orderFindAllByStoreResponses = orderService.listStoreOrder(storeId);
+        return ApiResponse.success(orderFindAllByStoreResponses);
     }
 
     /**
