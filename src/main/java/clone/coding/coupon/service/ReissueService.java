@@ -10,8 +10,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Service
@@ -70,9 +74,16 @@ public class ReissueService {
     }
 
     private void addRefreshToken(String email, String refresh, Long expiredMs) {
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-        Refresh refreshToken = new Refresh(email, refresh, date.toString());
+        LocalDateTime dateTime = LocalDateTime.now().plus(expiredMs, ChronoUnit.MILLIS).withNano(0);
+        Refresh refreshToken = new Refresh(email, refresh, dateTime);
         refreshRepository.save(refreshToken);
+    }
+
+    @Transactional
+    @Scheduled(fixedRate = 14400000)
+    public void removeExpiredRefreshToken() {
+        LocalDateTime now = LocalDateTime.now();
+        refreshRepository.deleteByExpirationBefore(now);
     }
 
     private Cookie createCookie(String key, String value) {

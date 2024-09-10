@@ -5,6 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,9 +22,9 @@ public class Refresh {
 
     private String refresh;
 
-    private String expiration;
+    private LocalDateTime expiration;
 
-    public Refresh(String email, String refresh, String expiration) {
+    public Refresh(String email, String refresh, LocalDateTime expiration) {
         this.email = email;
         this.refresh = refresh;
         this.expiration = expiration;
