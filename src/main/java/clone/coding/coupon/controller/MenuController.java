@@ -41,7 +41,7 @@ public class MenuController {
      * @return
      */
     @GetMapping("/list/{storeId}")
-    public ApiResponse<List<MenuFindAllResponse>> menuList(@PathVariable Long storeId) { // 메뉴이름, 가격, 품절여부 반환
+    public ApiResponse<List<MenuFindAllResponse>> menuList(@PathVariable Long storeId) {
         List<MenuFindAllResponse> allMenu = menuService.findAllMenu(storeId);
         return ApiResponse.success(allMenu);
     }
@@ -58,7 +58,7 @@ public class MenuController {
                                           BindingResult bindingResult,
                                           @PathVariable Long menuId) {
         menuService.modifyMenu(menuSaveAndUpdateRequest, menuId);
-        return ApiResponse.success("메뉴 정보가 업데이트 됐습니다.");
+        return ApiResponse.success("메뉴 정보가 업데이트 되었습니다.");
     }
 
     /**

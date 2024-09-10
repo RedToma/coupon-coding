@@ -8,6 +8,7 @@ import clone.coding.coupon.entity.coupon.CouponWallet;
 import clone.coding.coupon.entity.coupon.TimePolicy;
 import clone.coding.coupon.entity.customer.*;
 import clone.coding.coupon.entity.store.Store;
+import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.repository.CouponWalletRepository;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static clone.coding.coupon.entity.coupon.DiscountType.FIXED_DISCOUNT;
+import static clone.coding.coupon.global.exception.ErrorMessage.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,11 +39,9 @@ public class OrderService {
     public void addOrder(OrderSaveRequest orderSaveRequest, String email) {
         int totalPrice = 0;
         int discountAmount = 0;
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Customer customer = findCustomerByEmail(email);
 
-        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
-        if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
+        List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         CouponWallet myCoupon = couponWalletRepository.findById(orderSaveRequest.getCouponWalletId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
@@ -79,11 +79,9 @@ public class OrderService {
 
     @Transactional
     public void addOrderNotCoupon(OrderSaveRequest orderSaveRequest, String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Customer customer = findCustomerByEmail(email);
 
-        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
-        if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
+        List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         OrderMenu orderMenuInfo = orderMenus.stream().findFirst().get();
         Store store = orderMenuInfo.getMenu().getStore();
@@ -107,11 +105,8 @@ public class OrderService {
     }
 
     public OrderMenuAndCouponFindAllResponse listPurchaseOrder(String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
-        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
-        if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
+        Customer customer = findCustomerByEmail(email);
+        List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         int totalPrice = orderMenus.stream()
                 .mapToInt(i -> i.getMenuCnt() * i.getMenuPrice())
@@ -126,9 +121,7 @@ public class OrderService {
     }
 
     public List<OrderListFindAllResponse> listOrder(String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
+        Customer customer = findCustomerByEmail(email);
         return orderRepository.customerOrderList(customer.getId()).stream()
                 .map(OrderListFindAllResponse::new)
                 .collect(Collectors.toList());
@@ -142,8 +135,8 @@ public class OrderService {
 
     @Transactional
     public void modifyOrderStatusToCooking(Long orderId, Long arrivalExpectTime) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        Order order = findOrder(orderId);
+
         if (order.getStatusType() == StatusType.COOKING || order.getStatusType() == StatusType.DELIVERING
                 || order.getStatusType() == StatusType.DELIVERED || order.getStatusType() == StatusType.CANCEL) {
             throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
@@ -153,8 +146,8 @@ public class OrderService {
 
     @Transactional
     public void modifyOrderStatusToDelivering(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        Order order = findOrder(orderId);
+
         if (order.getStatusType() == StatusType.DELIVERING || order.getStatusType() == StatusType.DELIVERED
                 || order.getStatusType() == StatusType.CANCEL) {
             throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
@@ -164,8 +157,8 @@ public class OrderService {
 
     @Transactional
     public void modifyOrderStatusToDelivered(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        Order order = findOrder(orderId);
+
         if (order.getStatusType() == StatusType.DELIVERED || order.getStatusType() == StatusType.CANCEL) {
             throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
         }
@@ -174,18 +167,16 @@ public class OrderService {
 
     @Transactional
     public void modifyOrderStatusToCancel(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        Order order = findOrder(orderId);
         cancelCheck(order);
     }
 
     @Transactional
     public void modifyOrderStatusToCustomerCancel(Long orderId, String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Customer customer = findCustomerByEmail(email);
 
         Order order = orderRepository.findByIdAndCustomerId(orderId, customer.getId())
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_ORDER_NOT_FOUND));
         cancelCheck(order);
     }
 
@@ -220,5 +211,21 @@ public class OrderService {
         }
 
         return false;
+    }
+
+    private Customer findCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_MEMBER_NOT_FOUND));
+    }
+
+    private List<OrderMenu> findOrderMenus(Customer customer) {
+        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
+        if (orderMenus.isEmpty()) throw new IllegalArgumentException(ERROR_ORDER_MENU_EMPTY);
+        return orderMenus;
+    }
+
+    private Order findOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_ORDER_NOT_FOUND));
     }
 }

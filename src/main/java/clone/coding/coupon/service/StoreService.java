@@ -4,6 +4,7 @@ import clone.coding.coupon.dto.store.StoreFindByNameResponse;
 import clone.coding.coupon.dto.store.StoreSaveAndUpdateRequest;
 import clone.coding.coupon.entity.store.Brand;
 import clone.coding.coupon.entity.store.Store;
+import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.repository.BrandRepository;
 import clone.coding.coupon.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_BRAND_NOT_FOUND;
+import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_STORE_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,7 +28,7 @@ public class StoreService {
     @Transactional
     public void addStore(StoreSaveAndUpdateRequest storeSaveRequest, Long brandId) {
         Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_BRAND_NOT_FOUND));
 
         Store store = Store.builder()
                 .storeName(storeSaveRequest.getStoreName())
@@ -32,7 +36,6 @@ public class StoreService {
                 .address(storeSaveRequest.getAddress())
                 .brand(brand)
                 .build();
-
         storeRepository.save(store);
     }
 
@@ -44,16 +47,18 @@ public class StoreService {
 
     @Transactional
     public void modifyStore(StoreSaveAndUpdateRequest storeUpdateRequest, Long storeId) {
-        Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 지점 입니다."));
-
+        Store store = findStore(storeId);
         store.changeStoreInfo(storeUpdateRequest);
     }
 
     @Transactional
     public void removeStore(Long storeId) {
-        Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 지점 입니다."));
+        Store store = findStore(storeId);
         storeRepository.delete(store);
+    }
+
+    private Store findStore(Long storeId) {
+        return storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_STORE_NOT_FOUND));
     }
 }
