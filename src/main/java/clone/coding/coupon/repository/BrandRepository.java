@@ -8,4 +8,6 @@ import java.util.List;
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
     List<Brand> findByBrandNameContaining(String brandName);
+
+    Brand findByBrandName(String brandName);
 }

@@ -22,6 +22,8 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -82,8 +84,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     private void addRefreshToken(String email, String refresh, Long expiredMs) {
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-        Refresh refreshToken = new Refresh(email, refresh, date.toString());
+        LocalDateTime dateTime = LocalDateTime.now().plus(expiredMs, ChronoUnit.MILLIS).withNano(0);
+        Refresh refreshToken = new Refresh(email, refresh, dateTime);
         refreshRepository.save(refreshToken);
     }
 

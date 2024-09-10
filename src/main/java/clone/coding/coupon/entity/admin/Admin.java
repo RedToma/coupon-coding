@@ -18,8 +18,11 @@ public class Admin extends BaseTimeEntity {
 
     private String adminType;
 
-    public Admin(String adminType) {
+    private Long brandId;
+
+    public Admin(String adminType, Long brandId) {
         this.adminType = adminType;
+        this.brandId = brandId;
     }
 }
 

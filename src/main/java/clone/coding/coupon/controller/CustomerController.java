@@ -1,9 +1,9 @@
 package clone.coding.coupon.controller;
 
-import clone.coding.coupon.dto.customer.CustomerLoginRequest;
 import clone.coding.coupon.dto.customer.CustomerPwUpdateRequest;
 import clone.coding.coupon.dto.customer.CustomerSaveRequest;
 import clone.coding.coupon.global.ApiResponse;
+import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_EMAIL_DUPLICATION;
+import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_NICKNAME_DUPLICATION;
 
 @Validated
 @RestController
@@ -22,6 +25,7 @@ public class CustomerController {
 
     /**
      * 회원가입
+     *
      * @param customerSaveRequest
      * @param bindingResult
      * @return
@@ -47,6 +51,7 @@ public class CustomerController {
 
     /**
      * 회원탈퇴
+     *
      * @param userDetails
      * @return
      */
@@ -58,6 +63,7 @@ public class CustomerController {
 
     /**
      * 비밀번호 변경
+     *
      * @param customerPwUpdateRequest
      * @param bindingResult
      * @param userDetails
@@ -73,6 +79,7 @@ public class CustomerController {
 
     /**
      * 주소 변경
+     *
      * @param address
      * @param userDetails
      * @return
@@ -85,23 +92,25 @@ public class CustomerController {
 
     /**
      * 이메일 중복 확인
+     *
      * @param email
      * @return
      */
     @GetMapping("/customer/sign-up-email/{email}")
     public ApiResponse<?> customerCheckEmailDuplication(@PathVariable String email) {
-        if (customerService.checkEmailDuplication(email)) return ApiResponse.error("DUPLICATION", "이메일이 중복됩니다.");
+        if (customerService.checkEmailDuplication(email)) return ApiResponse.error("EMAIL_DUPLICATION", ERROR_EMAIL_DUPLICATION);
         return ApiResponse.success("사용 가능한 이메일 입니다.");
     }
 
     /**
      * 닉네임 중복 확인
+     *
      * @param nickname
      * @return
      */
     @GetMapping("/customer/sign-up-nickname/{nickname}")
     public ApiResponse<?> customerCheckNicknameDuplication(@PathVariable String nickname) {
-        if (customerService.checkNicknameDuplication(nickname)) return ApiResponse.error("DUPLICATION", "닉네임이 중복됩니다.");
+        if (customerService.checkNicknameDuplication(nickname)) return ApiResponse.error("NICKNAME_DUPLICATION", ERROR_NICKNAME_DUPLICATION);
         return ApiResponse.success("사용 가능한 닉네임 입니다.");
     }
 }
