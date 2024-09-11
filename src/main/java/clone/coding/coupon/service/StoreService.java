@@ -4,7 +4,6 @@ import clone.coding.coupon.dto.store.StoreFindByNameResponse;
 import clone.coding.coupon.dto.store.StoreSaveAndUpdateRequest;
 import clone.coding.coupon.entity.store.Brand;
 import clone.coding.coupon.entity.store.Store;
-import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.repository.BrandRepository;
 import clone.coding.coupon.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;

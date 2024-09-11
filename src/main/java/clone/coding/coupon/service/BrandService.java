@@ -2,7 +2,6 @@ package clone.coding.coupon.service;
 
 import clone.coding.coupon.dto.brand.BrandFindByNameResponse;
 import clone.coding.coupon.entity.store.Brand;
-import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

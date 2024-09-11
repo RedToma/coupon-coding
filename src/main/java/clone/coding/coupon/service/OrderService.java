@@ -8,7 +8,6 @@ import clone.coding.coupon.entity.coupon.CouponWallet;
 import clone.coding.coupon.entity.coupon.TimePolicy;
 import clone.coding.coupon.entity.customer.*;
 import clone.coding.coupon.entity.store.Store;
-import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.repository.CouponWalletRepository;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
@@ -23,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static clone.coding.coupon.entity.coupon.DiscountType.FIXED_DISCOUNT;
+import static clone.coding.coupon.entity.customer.StatusType.*;
 import static clone.coding.coupon.global.exception.ErrorMessage.*;
 
 @Service
@@ -39,12 +39,12 @@ public class OrderService {
     public void addOrder(OrderSaveRequest orderSaveRequest, String email) {
         int totalPrice = 0;
         int discountAmount = 0;
-        Customer customer = findCustomerByEmail(email);
 
+        Customer customer = findCustomerByEmail(email);
         List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         CouponWallet myCoupon = couponWalletRepository.findById(orderSaveRequest.getCouponWalletId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_COUPON_NOT_FOUND));
 
         if (myCoupon.getCoupon().getDiscountType().equals(FIXED_DISCOUNT)) {
             discountAmount = myCoupon.getCoupon().getAmount();
@@ -63,7 +63,7 @@ public class OrderService {
                 .paymentType(orderSaveRequest.getPaymentType())
                 .totalAmount(totalPrice)
                 .discount(discountAmount)
-                .statusType(StatusType.PREPARING)
+                .statusType(PREPARING)
                 .orderTime(LocalDateTime.now().withNano(0))
                 .customer(customer)
                 .store(store)
@@ -80,7 +80,6 @@ public class OrderService {
     @Transactional
     public void addOrderNotCoupon(OrderSaveRequest orderSaveRequest, String email) {
         Customer customer = findCustomerByEmail(email);
-
         List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         OrderMenu orderMenuInfo = orderMenus.stream().findFirst().get();
@@ -90,7 +89,7 @@ public class OrderService {
                 .paymentType(orderSaveRequest.getPaymentType())
                 .totalAmount(orderSaveRequest.getTotalAmount())
                 .discount(0)
-                .statusType(StatusType.PREPARING)
+                .statusType(PREPARING)
                 .orderTime(LocalDateTime.now().withNano(0))
                 .customer(customer)
                 .store(store)
@@ -137,9 +136,9 @@ public class OrderService {
     public void modifyOrderStatusToCooking(Long orderId, Long arrivalExpectTime) {
         Order order = findOrder(orderId);
 
-        if (order.getStatusType() == StatusType.COOKING || order.getStatusType() == StatusType.DELIVERING
-                || order.getStatusType() == StatusType.DELIVERED || order.getStatusType() == StatusType.CANCEL) {
-            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        if (order.getStatusType() == COOKING || order.getStatusType() == DELIVERING
+                || order.getStatusType() == DELIVERED || order.getStatusType() == CANCEL) {
+            throw new IllegalArgumentException(CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToCooking(arrivalExpectTime);
     }
@@ -148,9 +147,9 @@ public class OrderService {
     public void modifyOrderStatusToDelivering(Long orderId) {
         Order order = findOrder(orderId);
 
-        if (order.getStatusType() == StatusType.DELIVERING || order.getStatusType() == StatusType.DELIVERED
-                || order.getStatusType() == StatusType.CANCEL) {
-            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        if (order.getStatusType() == DELIVERING || order.getStatusType() == DELIVERED
+                || order.getStatusType() == CANCEL) {
+            throw new IllegalArgumentException(CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToDelivering();
     }
@@ -159,8 +158,8 @@ public class OrderService {
     public void modifyOrderStatusToDelivered(Long orderId) {
         Order order = findOrder(orderId);
 
-        if (order.getStatusType() == StatusType.DELIVERED || order.getStatusType() == StatusType.CANCEL) {
-            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        if (order.getStatusType() == DELIVERED || order.getStatusType() == CANCEL) {
+            throw new IllegalArgumentException(CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToDelivered();
     }
@@ -181,10 +180,12 @@ public class OrderService {
     }
 
     private void cancelCheck(Order order) {
-        if (order.getStatusType() == StatusType.COOKING || order.getStatusType() == StatusType.DELIVERING || order.getStatusType() == StatusType.DELIVERED) {
-            throw new IllegalArgumentException("주문을 취소할 수 없습니다.");
-        } else if (order.getStatusType() == StatusType.CANCEL) {
-            throw new IllegalArgumentException("이미 취소된 주문 입니다.");
+        StatusType statusType = order.getStatusType();
+
+        if (statusType == COOKING || statusType == DELIVERING || statusType == DELIVERED) {
+            throw new IllegalArgumentException(ORDER_CANNOT_CANCELLED);
+        } else if (statusType == CANCEL) {
+            throw new IllegalArgumentException(ORDER_ALREADY_CANCELLED);
         }
         order.orderStatusChangeToCancel();
     }

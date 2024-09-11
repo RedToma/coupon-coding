@@ -14,6 +14,7 @@ public class AdminController {
 
     /**
      * 어드민 생성(배민 관리자만 생성 가능)
+     *
      * @param type
      * @return
      */
@@ -25,6 +26,7 @@ public class AdminController {
 
     /**
      * 어드민 삭제
+     *
      * @param adminId
      * @return
      */

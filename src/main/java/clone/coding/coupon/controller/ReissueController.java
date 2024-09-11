@@ -14,6 +14,12 @@ public class ReissueController {
 
     private final ReissueService reissueService;
 
+    /**
+     * 토큰 재발급
+     * @param request
+     * @param response
+     * @return
+     */
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
         return reissueService.reissueAccessToken(request, response);

@@ -22,6 +22,7 @@ public class StoreController {
 
     /**
      * 지점 추가
+     *
      * @param storeSaveAndUpdateRequest
      * @param bindingResult
      * @param brandId
@@ -37,6 +38,7 @@ public class StoreController {
 
     /**
      * 지점 조회
+     *
      * @param storeName
      * @return
      */
@@ -48,6 +50,7 @@ public class StoreController {
 
     /**
      * 지점 정보 변경
+     *
      * @param storeSaveAndUpdateRequest
      * @param bindingResult
      * @param storeId
@@ -64,6 +67,7 @@ public class StoreController {
 
     /**
      * 지점 삭제
+     *
      * @param storeId
      * @return
      */

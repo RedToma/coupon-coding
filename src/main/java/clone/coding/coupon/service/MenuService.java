@@ -4,7 +4,6 @@ import clone.coding.coupon.dto.menu.MenuFindAllResponse;
 import clone.coding.coupon.dto.menu.MenuSaveAndUpdateRequest;
 import clone.coding.coupon.entity.store.Menu;
 import clone.coding.coupon.entity.store.Store;
-import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.repository.MenuRepository;
 import clone.coding.coupon.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;

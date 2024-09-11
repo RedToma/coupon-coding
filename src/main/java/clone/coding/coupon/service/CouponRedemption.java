@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+import static clone.coding.coupon.global.exception.ErrorMessage.*;
+
 @Component
 @RequiredArgsConstructor
 public class CouponRedemption {
@@ -22,9 +24,9 @@ public class CouponRedemption {
 
     public Coupon adminCouponIssuing(CouponSaveRequest couponSaveRequest) {
         Coupon coupon = null;
+
         TimePolicy timePolicy = timePolicySet(couponSaveRequest);
-        Admin admin = adminRepository.findById(couponSaveRequest.getIssuerCode())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
+        Admin admin = findAdmin(couponSaveRequest);
 
         if (admin.getAdminType().contains("BAMIN")) {
             coupon = Coupon.builder()
@@ -44,7 +46,7 @@ public class CouponRedemption {
                     .available(true)
                     .build();
         } else {
-            throw new IllegalArgumentException("어드민 쿠폰 생성 권한이 없습니다.");
+            throw new IllegalArgumentException(ERROR_NO_COUPON_CREATION_PERMISSION);
         }
 
         return coupon;
@@ -52,8 +54,7 @@ public class CouponRedemption {
 
     public Coupon brandCouponIssuing(CouponSaveRequest couponSaveRequest) {
         TimePolicy timePolicy = timePolicySet(couponSaveRequest);
-        Admin admin = adminRepository.findById(couponSaveRequest.getIssuerCode())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
+        Admin admin = findAdmin(couponSaveRequest);
 
         return Coupon.builder()
                 .name(couponSaveRequest.getName())
@@ -76,11 +77,11 @@ public class CouponRedemption {
 
     public Coupon storeCouponIssuing(CouponSaveRequest couponSaveRequest) {
         Coupon coupon = null;
+
         TimePolicy timePolicy = timePolicySet(couponSaveRequest);
-        Admin admin = adminRepository.findById(couponSaveRequest.getIssuerCode())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
+        Admin admin = findAdmin(couponSaveRequest);
         Store store = storeRepository.findByStoreName(couponSaveRequest.getStoreName())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 지점입니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_STORE_NOT_FOUND));
 
         if (admin.getBrandId() == store.getBrand().getId() || admin.getAdminType().contains("BAMIN")) {
             coupon = Coupon.builder()
@@ -102,14 +103,19 @@ public class CouponRedemption {
                     .available(true)
                     .build();
         } else {
-            throw new IllegalArgumentException("지점 쿠폰 생성 권한이 없습니다.");
+            throw new IllegalArgumentException(ERROR_NO_COUPON_CREATION_PERMISSION);
         }
 
         return coupon;
     }
 
 
-    private TimePolicy timePolicySet(CouponSaveRequest couponSaveRequest) { // policyStatus 보존?(없애는게 맞는듯) 시간정책 안쓰면 그냥 00:00:00 ~ 23:59:59
+    private TimePolicy timePolicySet(CouponSaveRequest couponSaveRequest) {
         return new TimePolicy(couponSaveRequest.getStartTime(), couponSaveRequest.getEndTime());
+    }
+
+    private Admin findAdmin(CouponSaveRequest couponSaveRequest) {
+        return adminRepository.findById(couponSaveRequest.getIssuerCode())
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_ADMIN_NOT_FOUND));
     }
 }

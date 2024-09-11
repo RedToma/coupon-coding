@@ -6,7 +6,6 @@ import clone.coding.coupon.entity.customer.Customer;
 import clone.coding.coupon.entity.customer.OrderMenu;
 import clone.coding.coupon.entity.customer.OrderStatus;
 import clone.coding.coupon.entity.store.Menu;
-import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.MenuRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
@@ -17,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_MEMBER_NOT_FOUND;
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_ORDER_MENU_NOT_FOUND;
+import static clone.coding.coupon.global.exception.ErrorMessage.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,7 +32,7 @@ public class OrderMenuService {
         Customer customer = findCustomerByEmail(email);
 
         Menu menu = menuRepository.findById(orderMenuSaveRequest.getMenuId())
-                .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_MENU_NOT_FOUND));
 
         OrderMenu orderMenu = OrderMenu.builder()
                 .menu(menu)

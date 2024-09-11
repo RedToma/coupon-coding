@@ -25,6 +25,7 @@ public class CouponWalletController {
 
     /**
      * 쿠폰 발급 (클릭)
+     *
      * @param userDetails
      * @param couponId
      * @return
@@ -37,6 +38,7 @@ public class CouponWalletController {
 
     /**
      * 쿠폰 코드 생성 (쿠폰코드 등록방식)
+     *
      * @param couponSaveRequest
      * @param bindingResult
      * @param couponQuantity
@@ -52,18 +54,20 @@ public class CouponWalletController {
 
     /**
      * 쿠폰 코드 업데이트(고객 입력)
+     *
      * @param userDetails
      * @param couponCode
      * @return
      */
     @PatchMapping("/couponcode/registration")
     public ApiResponse<Object> couponWalletCodeModify(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String couponCode) {
-        couponWalletService.modifyCouponCode(userDetails, couponCode);
+        couponWalletService.modifyCouponCode(userDetails.getUsername(), couponCode);
         return ApiResponse.success("쿠폰이 등록되었습니다.");
     }
 
     /**
      * 쿠폰 리스트 조회
+     *
      * @param userDetails
      * @return
      */
