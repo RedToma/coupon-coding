@@ -24,12 +24,23 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(","));
         String errorMessage = String.format("%s", errorDetail);
 
-        return ApiResponse.error("INVALID_INPUT_VALUE", errorMessage); // code형식 재지정 아마 ENUM 이용
+        return ApiResponse.error("INVALID_INPUT_VALUE", errorMessage);
     }
 
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(IllegalArgumentException.class)
+//    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException ex) {
+//        String[] split = ex.getMessage().split(": ");
+//        String errorCode = split[0];
+//        String errorMessage = split[1];
+//        return ApiResponse.error(errorCode, errorMessage);
+//    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ApiResponse.error("Error", ex.getMessage());
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ApiResponse<?> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return ApiResponse.error(ex.getErrorCode().getCode(), ex.getMessage());
     }
+
+
 }

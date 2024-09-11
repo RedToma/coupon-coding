@@ -8,6 +8,8 @@ import clone.coding.coupon.entity.coupon.CouponWallet;
 import clone.coding.coupon.entity.coupon.TimePolicy;
 import clone.coding.coupon.entity.customer.*;
 import clone.coding.coupon.entity.store.Store;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.CouponWalletRepository;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 
 import static clone.coding.coupon.entity.coupon.DiscountType.FIXED_DISCOUNT;
 import static clone.coding.coupon.entity.customer.StatusType.*;
-import static clone.coding.coupon.global.exception.ErrorMessage.*;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,7 +46,7 @@ public class OrderService {
         List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         CouponWallet myCoupon = couponWalletRepository.findById(orderSaveRequest.getCouponWalletId())
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_COUPON_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_COUPON_NOT_FOUND));
 
         if (myCoupon.getCoupon().getDiscountType().equals(FIXED_DISCOUNT)) {
             discountAmount = myCoupon.getCoupon().getAmount();
@@ -138,7 +140,7 @@ public class OrderService {
 
         if (order.getStatusType() == COOKING || order.getStatusType() == DELIVERING
                 || order.getStatusType() == DELIVERED || order.getStatusType() == CANCEL) {
-            throw new IllegalArgumentException(CANNOT_CHANGE_STATUS);
+            throw new ResourceNotFoundException(ERROR_CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToCooking(arrivalExpectTime);
     }
@@ -149,7 +151,7 @@ public class OrderService {
 
         if (order.getStatusType() == DELIVERING || order.getStatusType() == DELIVERED
                 || order.getStatusType() == CANCEL) {
-            throw new IllegalArgumentException(CANNOT_CHANGE_STATUS);
+            throw new ResourceNotFoundException(ERROR_CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToDelivering();
     }
@@ -159,7 +161,7 @@ public class OrderService {
         Order order = findOrder(orderId);
 
         if (order.getStatusType() == DELIVERED || order.getStatusType() == CANCEL) {
-            throw new IllegalArgumentException(CANNOT_CHANGE_STATUS);
+            throw new ResourceNotFoundException(ERROR_CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToDelivered();
     }
@@ -175,7 +177,7 @@ public class OrderService {
         Customer customer = findCustomerByEmail(email);
 
         Order order = orderRepository.findByIdAndCustomerId(orderId, customer.getId())
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_ORDER_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ORDER_NOT_FOUND));
         cancelCheck(order);
     }
 
@@ -183,9 +185,9 @@ public class OrderService {
         StatusType statusType = order.getStatusType();
 
         if (statusType == COOKING || statusType == DELIVERING || statusType == DELIVERED) {
-            throw new IllegalArgumentException(ORDER_CANNOT_CANCELLED);
+            throw new ResourceNotFoundException(ERROR_ORDER_CANNOT_CANCELLED);
         } else if (statusType == CANCEL) {
-            throw new IllegalArgumentException(ORDER_ALREADY_CANCELLED);
+            throw new ResourceNotFoundException(ERROR_ORDER_ALREADY_CANCELLED);
         }
         order.orderStatusChangeToCancel();
     }
@@ -216,17 +218,17 @@ public class OrderService {
 
     private Customer findCustomerByEmail(String email) {
         return customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MEMBER_NOT_FOUND));
     }
 
     private List<OrderMenu> findOrderMenus(Customer customer) {
         List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
-        if (orderMenus.isEmpty()) throw new IllegalArgumentException(ERROR_ORDER_MENU_EMPTY);
+        if (orderMenus.isEmpty()) throw new ResourceNotFoundException(ERROR_ORDER_MENU_EMPTY);
         return orderMenus;
     }
 
     private Order findOrder(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_ORDER_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ORDER_NOT_FOUND));
     }
 }

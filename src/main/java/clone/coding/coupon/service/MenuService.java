@@ -4,6 +4,8 @@ import clone.coding.coupon.dto.menu.MenuFindAllResponse;
 import clone.coding.coupon.dto.menu.MenuSaveAndUpdateRequest;
 import clone.coding.coupon.entity.store.Menu;
 import clone.coding.coupon.entity.store.Store;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.MenuRepository;
 import clone.coding.coupon.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_MENU_NOT_FOUND;
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_STORE_NOT_FOUND;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -27,7 +29,7 @@ public class MenuService {
     @Transactional
     public void addMenu(MenuSaveAndUpdateRequest menuSaveAndUpdateRequest, Long storeId) {
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_STORE_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_STORE_NOT_FOUND));
 
         Menu menu = Menu.builder()
                 .menuName(menuSaveAndUpdateRequest.getMenuName())
@@ -40,7 +42,7 @@ public class MenuService {
 
     public List<MenuFindAllResponse> findAllMenu(Long storeId) {
         storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_STORE_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_STORE_NOT_FOUND));
 
         return menuRepository.findByStoreId(storeId).stream()
                 .map(MenuFindAllResponse::new)
@@ -61,6 +63,6 @@ public class MenuService {
 
     private Menu findMenu(Long menuId) {
         return menuRepository.findById(menuId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_MENU_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MENU_NOT_FOUND));
     }
 }

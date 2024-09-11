@@ -54,6 +54,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/brand/**", "/store/**", "/menu/**", "/admin/**", "/coupon/**").permitAll()
                         .requestMatchers("/order/store/list/{storeId}").permitAll()
                         .requestMatchers("/couponwallet/couponcode/create").permitAll()
+                        .requestMatchers("/customer/sign-up-email/{email}", "/customer/sign-up-nickname/{nickname}").permitAll()
+                        .requestMatchers("/cooking-update/{orderId}", "/delivering-update/{orderId}", "/delivered-update/{orderId}", "/cancel-update/{orderId}").permitAll()
                         .anyRequest().authenticated());
 
         http

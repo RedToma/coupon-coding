@@ -5,6 +5,8 @@ import clone.coding.coupon.entity.admin.Admin;
 import clone.coding.coupon.entity.coupon.Coupon;
 import clone.coding.coupon.entity.coupon.TimePolicy;
 import clone.coding.coupon.entity.store.Store;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.AdminRepository;
 import clone.coding.coupon.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.*;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Component
 @RequiredArgsConstructor
@@ -46,7 +48,7 @@ public class CouponRedemption {
                     .available(true)
                     .build();
         } else {
-            throw new IllegalArgumentException(ERROR_NO_COUPON_CREATION_PERMISSION);
+            throw new ResourceNotFoundException(ERROR_NO_COUPON_CREATION_PERMISSION);
         }
 
         return coupon;
@@ -81,7 +83,7 @@ public class CouponRedemption {
         TimePolicy timePolicy = timePolicySet(couponSaveRequest);
         Admin admin = findAdmin(couponSaveRequest);
         Store store = storeRepository.findByStoreName(couponSaveRequest.getStoreName())
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_STORE_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_STORE_NOT_FOUND));
 
         if (admin.getBrandId() == store.getBrand().getId() || admin.getAdminType().contains("BAMIN")) {
             coupon = Coupon.builder()
@@ -103,7 +105,7 @@ public class CouponRedemption {
                     .available(true)
                     .build();
         } else {
-            throw new IllegalArgumentException(ERROR_NO_COUPON_CREATION_PERMISSION);
+            throw new ResourceNotFoundException(ERROR_NO_COUPON_CREATION_PERMISSION);
         }
 
         return coupon;
@@ -116,6 +118,6 @@ public class CouponRedemption {
 
     private Admin findAdmin(CouponSaveRequest couponSaveRequest) {
         return adminRepository.findById(couponSaveRequest.getIssuerCode())
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_ADMIN_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ADMIN_NOT_FOUND));
     }
 }

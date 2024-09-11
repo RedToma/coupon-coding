@@ -6,6 +6,8 @@ import clone.coding.coupon.entity.customer.Customer;
 import clone.coding.coupon.entity.customer.OrderMenu;
 import clone.coding.coupon.entity.customer.OrderStatus;
 import clone.coding.coupon.entity.store.Menu;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.MenuRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
@@ -16,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.*;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,7 +34,7 @@ public class OrderMenuService {
         Customer customer = findCustomerByEmail(email);
 
         Menu menu = menuRepository.findById(orderMenuSaveRequest.getMenuId())
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_MENU_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MENU_NOT_FOUND));
 
         OrderMenu orderMenu = OrderMenu.builder()
                 .menu(menu)
@@ -65,11 +67,11 @@ public class OrderMenuService {
 
     private OrderMenu findOrderMenu(Long orderMenuId) {
         return orderMenuRepository.findById(orderMenuId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_ORDER_MENU_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ORDER_MENU_NOT_FOUND));
     }
 
     private Customer findCustomerByEmail(String email) {
         return customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MEMBER_NOT_FOUND));
     }
 }

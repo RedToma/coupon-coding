@@ -12,9 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_EMAIL_DUPLICATION;
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_NICKNAME_DUPLICATION;
-
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -97,8 +94,7 @@ public class CustomerController {
      */
     @GetMapping("/customer/sign-up-email/{email}")
     public ApiResponse<?> customerCheckEmailDuplication(@PathVariable String email) {
-        if (customerService.checkEmailDuplication(email))
-            return ApiResponse.error("EMAIL_DUPLICATION", ERROR_EMAIL_DUPLICATION);
+        customerService.checkEmailDuplication(email);
         return ApiResponse.success("사용 가능한 이메일 입니다.");
     }
 
@@ -110,8 +106,7 @@ public class CustomerController {
      */
     @GetMapping("/customer/sign-up-nickname/{nickname}")
     public ApiResponse<?> customerCheckNicknameDuplication(@PathVariable String nickname) {
-        if (customerService.checkNicknameDuplication(nickname))
-            return ApiResponse.error("NICKNAME_DUPLICATION", ERROR_NICKNAME_DUPLICATION);
+        customerService.checkNicknameDuplication(nickname);
         return ApiResponse.success("사용 가능한 닉네임 입니다.");
     }
 }

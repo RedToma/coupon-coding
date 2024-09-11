@@ -2,6 +2,8 @@ package clone.coding.coupon.service;
 
 import clone.coding.coupon.dto.brand.BrandFindByNameResponse;
 import clone.coding.coupon.entity.store.Brand;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_BRAND_NOT_FOUND;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,6 +46,6 @@ public class BrandService {
 
     private Brand findBrand(Long brandId) {
         return brandRepository.findById(brandId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_BRAND_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_BRAND_NOT_FOUND));
     }
 }

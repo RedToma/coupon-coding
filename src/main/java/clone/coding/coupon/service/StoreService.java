@@ -4,6 +4,8 @@ import clone.coding.coupon.dto.store.StoreFindByNameResponse;
 import clone.coding.coupon.dto.store.StoreSaveAndUpdateRequest;
 import clone.coding.coupon.entity.store.Brand;
 import clone.coding.coupon.entity.store.Store;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.BrandRepository;
 import clone.coding.coupon.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_BRAND_NOT_FOUND;
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_STORE_NOT_FOUND;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,7 +28,7 @@ public class StoreService {
     @Transactional
     public void addStore(StoreSaveAndUpdateRequest storeSaveRequest, Long brandId) {
         Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_BRAND_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_BRAND_NOT_FOUND));
 
         Store store = Store.builder()
                 .storeName(storeSaveRequest.getStoreName())
@@ -58,6 +59,6 @@ public class StoreService {
 
     private Store findStore(Long storeId) {
         return storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_STORE_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_STORE_NOT_FOUND));
     }
 }

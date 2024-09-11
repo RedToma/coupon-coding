@@ -5,6 +5,8 @@ import clone.coding.coupon.dto.couponwallet.CouponWalletFindAllResponse;
 import clone.coding.coupon.entity.coupon.Coupon;
 import clone.coding.coupon.entity.coupon.CouponWallet;
 import clone.coding.coupon.entity.customer.Customer;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.CouponRepository;
 import clone.coding.coupon.repository.CouponWalletRepository;
 import clone.coding.coupon.repository.CustomerRepository;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.*;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,15 +39,15 @@ public class CouponWalletService {
 
         if (!couponExpirationDateCheck(coupon)) {
             coupon.couponExpired();
-            throw new IllegalArgumentException(ERROR_COUPON_ISSUE_PERIOD);
+            throw new ResourceNotFoundException(ERROR_COUPON_ISSUE_PERIOD);
         }
 
         if (!couponQuantityCheck(coupon)) {
-            throw new IllegalArgumentException(ERROR_COUPON_QUANTITY_EXCEEDED);
+            throw new ResourceNotFoundException(ERROR_COUPON_QUANTITY_EXCEEDED);
         }
 
         if (!couponsNumberCheck(customer, coupon)) {
-            throw new IllegalArgumentException(ERROR_COUPON_NO_LONGER_ISSUABLE);
+            throw new ResourceNotFoundException(ERROR_COUPON_NO_LONGER_ISSUABLE);
         }
 
         coupon.couponIssuedComplete();
@@ -72,12 +74,12 @@ public class CouponWalletService {
     @Transactional
     public void modifyCouponCode(String email, String couponCode) {
         CouponWallet couponWallet = couponWalletRepository.findByCouponCode(couponCode)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_COUPON_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_COUPON_NOT_FOUND));
         Coupon coupon = findCoupon(couponWallet.getCoupon().getId());
         Customer customer = findCustomer(email);
 
         if (!couponsNumberCheck(customer, coupon)) {
-            throw new IllegalArgumentException(ERROR_COUPON_NO_LONGER_ISSUABLE);
+            throw new ResourceNotFoundException(ERROR_COUPON_NO_LONGER_ISSUABLE);
         }
 
         couponWallet.customerInfoUpdate(customer);
@@ -123,11 +125,11 @@ public class CouponWalletService {
 
     private Customer findCustomer(String email) {
         return customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MEMBER_NOT_FOUND));
     }
 
     private Coupon findCoupon(Long couponId) {
         return couponRepository.findById(couponId)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_COUPON_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_COUPON_NOT_FOUND));
     }
 }

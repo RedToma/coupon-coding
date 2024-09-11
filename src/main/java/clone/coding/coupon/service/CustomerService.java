@@ -3,13 +3,15 @@ package clone.coding.coupon.service;
 import clone.coding.coupon.dto.customer.CustomerPwUpdateRequest;
 import clone.coding.coupon.dto.customer.CustomerSaveRequest;
 import clone.coding.coupon.entity.customer.Customer;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_MEMBER_NOT_FOUND;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -61,16 +63,18 @@ public class CustomerService {
         customer.changeAddress(address);
     }
 
-    public boolean checkEmailDuplication(String email) {
-        return customerRepository.existsByEmail(email);
+    public void checkEmailDuplication(String email) {
+        boolean emailCheck = customerRepository.existsByEmail(email);
+        if (emailCheck) throw new ResourceNotFoundException(ERROR_EMAIL_DUPLICATION);
     }
 
-    public boolean checkNicknameDuplication(String nickname) {
-        return customerRepository.existsByNickname(nickname);
+    public void checkNicknameDuplication(String nickname) {
+        boolean nicknameCheck = customerRepository.existsByNickname(nickname);
+        if (nicknameCheck) throw new ResourceNotFoundException(ERROR_NICKNAME_DUPLICATION);
     }
 
     private Customer findCustomerByEmail(String email) {
         return customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException(ERROR_MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MEMBER_NOT_FOUND));
     }
 }
