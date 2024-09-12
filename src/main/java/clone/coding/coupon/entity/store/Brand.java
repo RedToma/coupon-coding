@@ -18,11 +18,18 @@ public class Brand extends BaseTimeEntity {
 
     private String brandName;
 
+    private boolean operatingStatus;
+
     public Brand(String brandName) {
         this.brandName = brandName;
+        this.operatingStatus = true;
     }
 
     public void changeBrandName(String brandName) {
         this.brandName = brandName;
+    }
+
+    public void changeOperatingStatus() {
+        this.operatingStatus = false;
     }
 }

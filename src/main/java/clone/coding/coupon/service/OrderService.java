@@ -56,7 +56,9 @@ public class OrderService {
             totalPrice = orderSaveRequest.getTotalAmount() - discountAmount;
         }
 
-        myCoupon.couponUseProcess();
+        //결제 시간이랑 쿠폰 사용시간이랑 같게 넣어버려서 쿠폰 추적 가능하게?
+        LocalDateTime couponRedemptionAndOrderTime = LocalDateTime.now().withNano(0);
+        myCoupon.couponUseProcess(couponRedemptionAndOrderTime);
 
         OrderMenu orderMenuInfo = orderMenus.stream().findFirst().get();
         Store store = orderMenuInfo.getMenu().getStore();
@@ -66,7 +68,9 @@ public class OrderService {
                 .totalAmount(totalPrice)
                 .discount(discountAmount)
                 .statusType(PREPARING)
-                .orderTime(LocalDateTime.now().withNano(0))
+                .orderTime(couponRedemptionAndOrderTime)
+                .usedCouponName(myCoupon.getCoupon().getName())
+                .promotionCode(myCoupon.getCoupon().getPromotionCode())
                 .customer(customer)
                 .store(store)
                 .build();

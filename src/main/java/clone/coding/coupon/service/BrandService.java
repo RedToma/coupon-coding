@@ -1,10 +1,13 @@
 package clone.coding.coupon.service;
 
 import clone.coding.coupon.dto.brand.BrandFindByNameResponse;
+import clone.coding.coupon.entity.admin.Admin;
+import clone.coding.coupon.entity.coupon.Coupon;
+import clone.coding.coupon.entity.coupon.CouponWallet;
 import clone.coding.coupon.entity.store.Brand;
 import clone.coding.coupon.global.exception.ResourceNotFoundException;
 import clone.coding.coupon.global.exception.error.ErrorCode;
-import clone.coding.coupon.repository.BrandRepository;
+import clone.coding.coupon.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,10 @@ import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 public class BrandService {
 
     private final BrandRepository brandRepository;
+    private final StoreRepository storeRepository;
+    private final AdminRepository adminRepository;
+    private final CouponRepository couponRepository;
+    private final CouponWalletRepository couponWalletRepository;
 
     @Transactional
     public void addBrand(String brandName) {
@@ -39,9 +46,25 @@ public class BrandService {
     }
 
     @Transactional
-    public void removeBrand(Long brandId) {
-        Brand brand = findBrand(brandId);
-        brandRepository.delete(brand);
+    public void closeBrand(Long brandId) {
+        storeRepository.setBrandIdToNullByBrandId(brandId);
+        Admin admin = adminRepository.findByBrandId(brandId)
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ADMIN_NOT_FOUND));
+
+        closeBrandBusiness(admin);
+        findBrand(brandId).changeOperatingStatus();
+        adminRepository.delete(admin);
+    }
+
+    private void closeBrandBusiness(Admin admin) {
+        List<Coupon> couponsByIssuerCode = couponRepository.findCouponsByIssuerCode(admin.getId());
+        List<Long> couponIds = couponsByIssuerCode.stream()
+                .map(Coupon::getId)
+                .collect(Collectors.toList());
+
+        couponsByIssuerCode.forEach(Coupon::disableCouponUsage);
+        couponWalletRepository.findByCouponIds(couponIds).stream()
+                .forEach(CouponWallet::disableCouponUsage);
     }
 
     private Brand findBrand(Long brandId) {

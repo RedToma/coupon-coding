@@ -25,6 +25,8 @@ public class Store extends BaseTimeEntity {
 
     private String address;
 
+    private boolean operatingStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
     private Brand brand;
@@ -33,5 +35,9 @@ public class Store extends BaseTimeEntity {
         storeName = storeSaveAndUpdateRequest.getStoreName();
         storeNum = storeSaveAndUpdateRequest.getStoreNum();
         address = storeSaveAndUpdateRequest.getAddress();
+    }
+
+    public void changeOperatingStatus() {
+        this.operatingStatus = false;
     }
 }

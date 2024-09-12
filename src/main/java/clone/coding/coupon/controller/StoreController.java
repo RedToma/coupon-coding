@@ -66,14 +66,14 @@ public class StoreController {
 
 
     /**
-     * 지점 삭제
+     * 지점 폐업
      *
      * @param storeId
      * @return
      */
-    @DeleteMapping("/remove/{storeId}")
-    public ApiResponse<Object> storeRemove(@PathVariable Long storeId) {
-        storeService.removeStore(storeId);
-        return ApiResponse.success("지점이 삭제되었습니다.");
+    @PatchMapping("/close-store/{storeId}")
+    public ApiResponse<Object> storeClose(@PathVariable Long storeId) {
+        storeService.closeStore(storeId);
+        return ApiResponse.success("지점이 폐업되었습니다.");
     }
 }
