@@ -1,5 +1,6 @@
 package clone.coding.coupon.entity.orderhistory;
 
+import clone.coding.coupon.entity.BaseTimeEntity;
 import clone.coding.coupon.entity.customer.PaymentType;
 import clone.coding.coupon.entity.customer.StatusType;
 import jakarta.persistence.*;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DeletedMemberOrders {
+public class DeletedMemberOrders extends BaseTimeEntity {
 
 
     @Id

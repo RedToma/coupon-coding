@@ -56,7 +56,6 @@ public class OrderService {
             totalPrice = orderSaveRequest.getTotalAmount() - discountAmount;
         }
 
-        //결제 시간이랑 쿠폰 사용시간이랑 같게 넣어버려서 쿠폰 추적 가능하게?
         LocalDateTime couponRedemptionAndOrderTime = LocalDateTime.now().withNano(0);
         myCoupon.couponUseProcess(couponRedemptionAndOrderTime);
 
