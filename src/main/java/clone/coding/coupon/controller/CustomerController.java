@@ -32,19 +32,6 @@ public class CustomerController {
         return ApiResponse.success("회원가입이 완료되었습니다.");
     }
 
-//    /**
-//     * 로그인
-//     * @param customerLoginRequest
-//     * @param bindingResult
-//     * @return
-//     */
-//    @PostMapping("/login") //form-data or JSON 둘 중 어느 방식 쓸건지 고민(일단 JSON)
-//    public ApiResponse<Object> customerLoginDetails(@Valid @RequestBody CustomerLoginRequest customerLoginRequest,
-//                                                    BindingResult bindingResult) {
-//        customerService.findCustomer(customerLoginRequest);
-//        return ApiResponse.success("로그인 되었습니다.");
-//    }
-
     /**
      * 회원탈퇴
      *
