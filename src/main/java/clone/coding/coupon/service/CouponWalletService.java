@@ -35,7 +35,7 @@ public class CouponWalletService {
     @Transactional(noRollbackFor = IllegalArgumentException.class)
     public void addCouponWallet(String email, Long couponId) {
         Customer customer = findCustomer(email);
-        Coupon coupon = findCoupon(couponId);
+        Coupon coupon = findAndLockCouponById(couponId);
 
         if (!couponExpirationDateCheck(coupon)) {
             coupon.couponExpired();
@@ -130,6 +130,11 @@ public class CouponWalletService {
 
     private Coupon findCoupon(Long couponId) {
         return couponRepository.findById(couponId)
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_COUPON_NOT_FOUND));
+    }
+
+    private Coupon findAndLockCouponById(Long couponId) {
+        return couponRepository.findCouponById(couponId)
                 .orElseThrow(() -> new ResourceNotFoundException(ERROR_COUPON_NOT_FOUND));
     }
 }
