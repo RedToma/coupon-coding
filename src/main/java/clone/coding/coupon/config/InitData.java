@@ -68,6 +68,7 @@ public class InitData {
                     .storeName("BBQ 송도1동")
                     .storeNum("070-1231-4567")
                     .address("송도")
+                    .operatingStatus(true)
                     .brand(brand1)
                     .build();
             em.persist(store1);
@@ -76,6 +77,7 @@ public class InitData {
                     .storeName("BHC 송도1동")
                     .storeNum("070-1232-4567")
                     .address("송도")
+                    .operatingStatus(true)
                     .brand(brand2)
                     .build();
             em.persist(store2);

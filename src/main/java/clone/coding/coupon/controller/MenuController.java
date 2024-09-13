@@ -23,6 +23,7 @@ public class MenuController {
 
     /**
      * 메뉴 추가
+     *
      * @param menuSaveAndUpdateRequest
      * @param storeId
      * @return
@@ -37,17 +38,19 @@ public class MenuController {
 
     /**
      * 메뉴 조회
+     *
      * @param storeId
      * @return
      */
     @GetMapping("/list/{storeId}")
-    public ApiResponse<List<MenuFindAllResponse>> menuList(@PathVariable Long storeId) { // 메뉴이름, 가격, 품절여부 반환
+    public ApiResponse<List<MenuFindAllResponse>> menuList(@PathVariable Long storeId) {
         List<MenuFindAllResponse> allMenu = menuService.findAllMenu(storeId);
         return ApiResponse.success(allMenu);
     }
 
     /**
      * 메뉴 수정
+     *
      * @param menuSaveAndUpdateRequest
      * @param bindingResult
      * @param menuId
@@ -58,11 +61,12 @@ public class MenuController {
                                           BindingResult bindingResult,
                                           @PathVariable Long menuId) {
         menuService.modifyMenu(menuSaveAndUpdateRequest, menuId);
-        return ApiResponse.success("메뉴 정보가 업데이트 됐습니다.");
+        return ApiResponse.success("메뉴 정보가 업데이트 되었습니다.");
     }
 
     /**
      * 메뉴 삭제
+     *
      * @param menuId
      * @return
      */

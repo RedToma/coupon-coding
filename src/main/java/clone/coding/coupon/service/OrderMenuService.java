@@ -6,6 +6,8 @@ import clone.coding.coupon.entity.customer.Customer;
 import clone.coding.coupon.entity.customer.OrderMenu;
 import clone.coding.coupon.entity.customer.OrderStatus;
 import clone.coding.coupon.entity.store.Menu;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.MenuRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,11 +31,10 @@ public class OrderMenuService {
 
     @Transactional
     public void addOrderMenu(OrderMenuSaveRequest orderMenuSaveRequest, String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Customer customer = findCustomerByEmail(email);
 
         Menu menu = menuRepository.findById(orderMenuSaveRequest.getMenuId())
-                .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MENU_NOT_FOUND));
 
         OrderMenu orderMenu = OrderMenu.builder()
                 .menu(menu)
@@ -44,9 +47,7 @@ public class OrderMenuService {
     }
 
     public List<OrderMenuFindAllResponse> findOrderMenu(String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
+        Customer customer = findCustomerByEmail(email);
         return orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER).stream()
                 .map(OrderMenuFindAllResponse::new)
                 .collect(Collectors.toList());
@@ -54,15 +55,23 @@ public class OrderMenuService {
 
     @Transactional
     public void modifyOrderMenu(int menuCnt, Long orderMenuId) {
-        OrderMenu orderMenu = orderMenuRepository.findById(orderMenuId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 장바구니 목록입니다."));
+        OrderMenu orderMenu = findOrderMenu(orderMenuId);
         orderMenu.changeMenuCnt(menuCnt);
     }
 
     @Transactional
     public void removeOrderMenu(Long orderMenuId) {
-        OrderMenu orderMenu = orderMenuRepository.findById(orderMenuId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 장바구니 목록입니다."));
+        OrderMenu orderMenu = findOrderMenu(orderMenuId);
         orderMenuRepository.delete(orderMenu);
+    }
+
+    private OrderMenu findOrderMenu(Long orderMenuId) {
+        return orderMenuRepository.findById(orderMenuId)
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ORDER_MENU_NOT_FOUND));
+    }
+
+    private Customer findCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MEMBER_NOT_FOUND));
     }
 }

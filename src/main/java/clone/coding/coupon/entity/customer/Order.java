@@ -39,6 +39,10 @@ public class Order extends BaseTimeEntity {
 
     private LocalDateTime arrivalTime;
 
+    private String usedCouponName;
+
+    private String promotionCode;
+
     @OneToMany(mappedBy = "order")
     @Builder.Default
     private List<OrderMenu> orderMenus = new ArrayList<>();

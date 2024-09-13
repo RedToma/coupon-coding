@@ -4,6 +4,8 @@ import clone.coding.coupon.dto.menu.MenuFindAllResponse;
 import clone.coding.coupon.dto.menu.MenuSaveAndUpdateRequest;
 import clone.coding.coupon.entity.store.Menu;
 import clone.coding.coupon.entity.store.Store;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.MenuRepository;
 import clone.coding.coupon.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -24,7 +29,7 @@ public class MenuService {
     @Transactional
     public void addMenu(MenuSaveAndUpdateRequest menuSaveAndUpdateRequest, Long storeId) {
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 지점입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_STORE_NOT_FOUND));
 
         Menu menu = Menu.builder()
                 .menuName(menuSaveAndUpdateRequest.getMenuName())
@@ -37,7 +42,7 @@ public class MenuService {
 
     public List<MenuFindAllResponse> findAllMenu(Long storeId) {
         storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 지점입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_STORE_NOT_FOUND));
 
         return menuRepository.findByStoreId(storeId).stream()
                 .map(MenuFindAllResponse::new)
@@ -46,16 +51,18 @@ public class MenuService {
 
     @Transactional
     public void modifyMenu(MenuSaveAndUpdateRequest menuSaveAndUpdateRequest, Long menuId) {
-        Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
-
+        Menu menu = findMenu(menuId);
         menu.updateMenu(menuSaveAndUpdateRequest);
     }
 
     @Transactional
     public void removeMenu(Long menuId) {
-        Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
+        Menu menu = findMenu(menuId);
         menuRepository.delete(menu);
+    }
+
+    private Menu findMenu(Long menuId) {
+        return menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MENU_NOT_FOUND));
     }
 }

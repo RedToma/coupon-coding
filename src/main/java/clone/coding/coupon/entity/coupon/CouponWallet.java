@@ -41,12 +41,16 @@ public class CouponWallet extends BaseTimeEntity {
         this.customer = customer;
     }
 
-    public void couponUseProcess() {
+    public void couponUseProcess(LocalDateTime usedAt) {
         this.useYn = true;
-        this.usedAt = LocalDateTime.now().withNano(0);
+        this.usedAt = usedAt;
     }
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public void disableCouponUsage() {
+        this.useYn = true;
     }
 }

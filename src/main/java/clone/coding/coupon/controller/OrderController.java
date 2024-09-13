@@ -4,7 +4,6 @@ import clone.coding.coupon.dto.order.OrderFindAllByStoreResponse;
 import clone.coding.coupon.dto.order.OrderListFindAllResponse;
 import clone.coding.coupon.dto.order.OrderMenuAndCouponFindAllResponse;
 import clone.coding.coupon.dto.order.OrderSaveRequest;
-import clone.coding.coupon.entity.customer.PaymentType;
 import clone.coding.coupon.global.ApiResponse;
 import clone.coding.coupon.service.OrderService;
 import jakarta.validation.Valid;
@@ -27,6 +26,7 @@ public class OrderController {
 
     /**
      * 주문 생성
+     *
      * @param orderSaveRequest
      * @param userDetails
      * @return
@@ -35,7 +35,8 @@ public class OrderController {
     public ApiResponse<Object> orderAdd(@Valid @RequestBody OrderSaveRequest orderSaveRequest,
                                         BindingResult bindingResult,
                                         @AuthenticationPrincipal UserDetails userDetails) {
-        if (orderSaveRequest.getCouponWalletId() != null) orderService.addOrder(orderSaveRequest, userDetails.getUsername());
+        if (orderSaveRequest.getCouponWalletId() != null)
+            orderService.addOrder(orderSaveRequest, userDetails.getUsername());
         else orderService.addOrderNotCoupon(orderSaveRequest, userDetails.getUsername());
 
         return ApiResponse.success("주문이 생성되었습니다.");
@@ -43,6 +44,7 @@ public class OrderController {
 
     /**
      * 주문하기(주문생성 전)
+     *
      * @param userDetails
      * @return
      */
@@ -54,6 +56,7 @@ public class OrderController {
 
     /**
      * 주문 목록 조회
+     *
      * @param userDetails
      * @return
      */
@@ -65,6 +68,7 @@ public class OrderController {
 
     /**
      * 주문 목록 조회(가게 사장)
+     *
      * @param storeId
      * @return
      */
@@ -76,6 +80,7 @@ public class OrderController {
 
     /**
      * 주문 상태 변경(조리 중)
+     *
      * @param orderId
      * @param arrivalExpectTime
      * @return
@@ -88,6 +93,7 @@ public class OrderController {
 
     /**
      * 주문 상태 변경(배달 중)
+     *
      * @param orderId
      * @return
      */
@@ -99,6 +105,7 @@ public class OrderController {
 
     /**
      * 주문 상태 변경(배달 완료)
+     *
      * @param orderId
      * @return
      */
@@ -110,6 +117,7 @@ public class OrderController {
 
     /**
      * 주문 취소(가게)
+     *
      * @param orderId
      * @return
      */
@@ -121,6 +129,7 @@ public class OrderController {
 
     /**
      * 주문 취소(고객)
+     *
      * @param orderId
      * @param userDetails
      * @return

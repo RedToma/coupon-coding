@@ -3,7 +3,6 @@ package clone.coding.coupon.controller;
 import clone.coding.coupon.dto.brand.BrandFindByNameResponse;
 import clone.coding.coupon.global.ApiResponse;
 import clone.coding.coupon.service.BrandService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +17,7 @@ public class BrandController {
 
     /**
      * 브랜드 추가
+     *
      * @param brandName
      * @return
      */
@@ -29,6 +29,7 @@ public class BrandController {
 
     /**
      * 브랜드 검색
+     *
      * @param brandName
      * @return
      */
@@ -40,6 +41,7 @@ public class BrandController {
 
     /**
      * 브랜드 이름 변경
+     *
      * @param newBrandName
      * @param brandId
      * @return
@@ -51,13 +53,14 @@ public class BrandController {
     }
 
     /**
-     * 브랜드 삭제
+     * 브랜드 폐업
+     *
      * @param brandId
      * @return
      */
-    @DeleteMapping("/remove-brand/{brandId}")
-    public ApiResponse<Object> brandRemove(@PathVariable Long brandId) {
-        brandService.removeBrand(brandId);
-        return ApiResponse.success("브랜드가 삭제되었습니다.");
+    @PatchMapping("/close-brand/{brandId}")
+    public ApiResponse<Object> brandClose(@PathVariable Long brandId) {
+        brandService.closeBrand(brandId);
+        return ApiResponse.success("브랜드가 폐업되었습니다.");
     }
 }

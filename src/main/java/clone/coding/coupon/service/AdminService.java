@@ -2,11 +2,15 @@ package clone.coding.coupon.service;
 
 import clone.coding.coupon.entity.admin.Admin;
 import clone.coding.coupon.entity.store.Brand;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.AdminRepository;
 import clone.coding.coupon.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static clone.coding.coupon.global.exception.error.ErrorCode.ERROR_ADMIN_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,7 +25,7 @@ public class AdminService {
         Admin admin;
         Brand brand = brandRepository.findByBrandName(type);
 
-        if (brand == null)  admin = new Admin(type + "_ADMIN", null);
+        if (brand == null) admin = new Admin(type + "_ADMIN", null);
         else admin = new Admin(type + "_ADMIN", brand.getId());
 
         adminRepository.save(admin);
@@ -30,7 +34,7 @@ public class AdminService {
     @Transactional
     public void removeAdmin(Long adminId) {
         Admin admin = adminRepository.findById(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ADMIN_NOT_FOUND));
         adminRepository.delete(admin);
     }
 }

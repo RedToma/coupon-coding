@@ -65,4 +65,9 @@ public class Coupon extends BaseTimeEntity {
     public void couponIssuedComplete() {
         allocatedCnt++;
     }
+
+    public void disableCouponUsage() {
+        available = false;
+        issuerCode = null;
+    }
 }

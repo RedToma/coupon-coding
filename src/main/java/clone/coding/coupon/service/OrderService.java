@@ -8,6 +8,8 @@ import clone.coding.coupon.entity.coupon.CouponWallet;
 import clone.coding.coupon.entity.coupon.TimePolicy;
 import clone.coding.coupon.entity.customer.*;
 import clone.coding.coupon.entity.store.Store;
+import clone.coding.coupon.global.exception.ResourceNotFoundException;
+import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.CouponWalletRepository;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;
@@ -22,6 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static clone.coding.coupon.entity.coupon.DiscountType.FIXED_DISCOUNT;
+import static clone.coding.coupon.entity.customer.StatusType.*;
+import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,14 +41,12 @@ public class OrderService {
     public void addOrder(OrderSaveRequest orderSaveRequest, String email) {
         int totalPrice = 0;
         int discountAmount = 0;
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
-        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
-        if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
+        Customer customer = findCustomerByEmail(email);
+        List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         CouponWallet myCoupon = couponWalletRepository.findById(orderSaveRequest.getCouponWalletId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_COUPON_NOT_FOUND));
 
         if (myCoupon.getCoupon().getDiscountType().equals(FIXED_DISCOUNT)) {
             discountAmount = myCoupon.getCoupon().getAmount();
@@ -54,7 +56,8 @@ public class OrderService {
             totalPrice = orderSaveRequest.getTotalAmount() - discountAmount;
         }
 
-        myCoupon.couponUseProcess();
+        LocalDateTime couponRedemptionAndOrderTime = LocalDateTime.now().withNano(0);
+        myCoupon.couponUseProcess(couponRedemptionAndOrderTime);
 
         OrderMenu orderMenuInfo = orderMenus.stream().findFirst().get();
         Store store = orderMenuInfo.getMenu().getStore();
@@ -63,8 +66,10 @@ public class OrderService {
                 .paymentType(orderSaveRequest.getPaymentType())
                 .totalAmount(totalPrice)
                 .discount(discountAmount)
-                .statusType(StatusType.PREPARING)
-                .orderTime(LocalDateTime.now().withNano(0))
+                .statusType(PREPARING)
+                .orderTime(couponRedemptionAndOrderTime)
+                .usedCouponName(myCoupon.getCoupon().getName())
+                .promotionCode(myCoupon.getCoupon().getPromotionCode())
                 .customer(customer)
                 .store(store)
                 .build();
@@ -79,11 +84,8 @@ public class OrderService {
 
     @Transactional
     public void addOrderNotCoupon(OrderSaveRequest orderSaveRequest, String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
-        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
-        if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
+        Customer customer = findCustomerByEmail(email);
+        List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         OrderMenu orderMenuInfo = orderMenus.stream().findFirst().get();
         Store store = orderMenuInfo.getMenu().getStore();
@@ -92,7 +94,7 @@ public class OrderService {
                 .paymentType(orderSaveRequest.getPaymentType())
                 .totalAmount(orderSaveRequest.getTotalAmount())
                 .discount(0)
-                .statusType(StatusType.PREPARING)
+                .statusType(PREPARING)
                 .orderTime(LocalDateTime.now().withNano(0))
                 .customer(customer)
                 .store(store)
@@ -107,11 +109,8 @@ public class OrderService {
     }
 
     public OrderMenuAndCouponFindAllResponse listPurchaseOrder(String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
-        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
-        if (orderMenus.isEmpty()) throw new IllegalArgumentException("장바구니가 비어있습니다 주문할 수 없습니다.");
+        Customer customer = findCustomerByEmail(email);
+        List<OrderMenu> orderMenus = findOrderMenus(customer);
 
         int totalPrice = orderMenus.stream()
                 .mapToInt(i -> i.getMenuCnt() * i.getMenuPrice())
@@ -126,9 +125,7 @@ public class OrderService {
     }
 
     public List<OrderListFindAllResponse> listOrder(String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
+        Customer customer = findCustomerByEmail(email);
         return orderRepository.customerOrderList(customer.getId()).stream()
                 .map(OrderListFindAllResponse::new)
                 .collect(Collectors.toList());
@@ -142,58 +139,58 @@ public class OrderService {
 
     @Transactional
     public void modifyOrderStatusToCooking(Long orderId, Long arrivalExpectTime) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
-        if (order.getStatusType() == StatusType.COOKING || order.getStatusType() == StatusType.DELIVERING
-                || order.getStatusType() == StatusType.DELIVERED || order.getStatusType() == StatusType.CANCEL) {
-            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        Order order = findOrder(orderId);
+
+        if (order.getStatusType() == COOKING || order.getStatusType() == DELIVERING
+                || order.getStatusType() == DELIVERED || order.getStatusType() == CANCEL) {
+            throw new ResourceNotFoundException(ERROR_CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToCooking(arrivalExpectTime);
     }
 
     @Transactional
     public void modifyOrderStatusToDelivering(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
-        if (order.getStatusType() == StatusType.DELIVERING || order.getStatusType() == StatusType.DELIVERED
-                || order.getStatusType() == StatusType.CANCEL) {
-            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        Order order = findOrder(orderId);
+
+        if (order.getStatusType() == DELIVERING || order.getStatusType() == DELIVERED
+                || order.getStatusType() == CANCEL) {
+            throw new ResourceNotFoundException(ERROR_CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToDelivering();
     }
 
     @Transactional
     public void modifyOrderStatusToDelivered(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
-        if (order.getStatusType() == StatusType.DELIVERED || order.getStatusType() == StatusType.CANCEL) {
-            throw new IllegalArgumentException("상태를 변경할 수 없습니다.");
+        Order order = findOrder(orderId);
+
+        if (order.getStatusType() == DELIVERED || order.getStatusType() == CANCEL) {
+            throw new ResourceNotFoundException(ERROR_CANNOT_CHANGE_STATUS);
         }
         order.orderStatusChangeToDelivered();
     }
 
     @Transactional
     public void modifyOrderStatusToCancel(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        Order order = findOrder(orderId);
         cancelCheck(order);
     }
 
     @Transactional
     public void modifyOrderStatusToCustomerCancel(Long orderId, String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Customer customer = findCustomerByEmail(email);
 
         Order order = orderRepository.findByIdAndCustomerId(orderId, customer.getId())
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ORDER_NOT_FOUND));
         cancelCheck(order);
     }
 
     private void cancelCheck(Order order) {
-        if (order.getStatusType() == StatusType.COOKING || order.getStatusType() == StatusType.DELIVERING || order.getStatusType() == StatusType.DELIVERED) {
-            throw new IllegalArgumentException("주문을 취소할 수 없습니다.");
-        } else if (order.getStatusType() == StatusType.CANCEL) {
-            throw new IllegalArgumentException("이미 취소된 주문 입니다.");
+        StatusType statusType = order.getStatusType();
+
+        if (statusType == COOKING || statusType == DELIVERING || statusType == DELIVERED) {
+            throw new ResourceNotFoundException(ERROR_ORDER_CANNOT_CANCELLED);
+        } else if (statusType == CANCEL) {
+            throw new ResourceNotFoundException(ERROR_ORDER_ALREADY_CANCELLED);
         }
         order.orderStatusChangeToCancel();
     }
@@ -220,5 +217,21 @@ public class OrderService {
         }
 
         return false;
+    }
+
+    private Customer findCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_MEMBER_NOT_FOUND));
+    }
+
+    private List<OrderMenu> findOrderMenus(Customer customer) {
+        List<OrderMenu> orderMenus = orderMenuRepository.customerOrderMenuList(customer.getId(), OrderStatus.NOT_ORDER);
+        if (orderMenus.isEmpty()) throw new ResourceNotFoundException(ERROR_ORDER_MENU_EMPTY);
+        return orderMenus;
+    }
+
+    private Order findOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException(ERROR_ORDER_NOT_FOUND));
     }
 }

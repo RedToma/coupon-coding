@@ -3,7 +3,6 @@ package clone.coding.coupon.controller;
 import clone.coding.coupon.dto.customer.CustomerPwUpdateRequest;
 import clone.coding.coupon.dto.customer.CustomerSaveRequest;
 import clone.coding.coupon.global.ApiResponse;
-import clone.coding.coupon.global.exception.ErrorMessage;
 import clone.coding.coupon.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_EMAIL_DUPLICATION;
-import static clone.coding.coupon.global.exception.ErrorMessage.ERROR_NICKNAME_DUPLICATION;
 
 @Validated
 @RestController
@@ -35,19 +31,6 @@ public class CustomerController {
         customerService.addCustomer(customerSaveRequest);
         return ApiResponse.success("회원가입이 완료되었습니다.");
     }
-
-//    /**
-//     * 로그인
-//     * @param customerLoginRequest
-//     * @param bindingResult
-//     * @return
-//     */
-//    @PostMapping("/login") //form-data or JSON 둘 중 어느 방식 쓸건지 고민(일단 JSON)
-//    public ApiResponse<Object> customerLoginDetails(@Valid @RequestBody CustomerLoginRequest customerLoginRequest,
-//                                                    BindingResult bindingResult) {
-//        customerService.findCustomer(customerLoginRequest);
-//        return ApiResponse.success("로그인 되었습니다.");
-//    }
 
     /**
      * 회원탈퇴
@@ -98,7 +81,7 @@ public class CustomerController {
      */
     @GetMapping("/customer/sign-up-email/{email}")
     public ApiResponse<?> customerCheckEmailDuplication(@PathVariable String email) {
-        if (customerService.checkEmailDuplication(email)) return ApiResponse.error("EMAIL_DUPLICATION", ERROR_EMAIL_DUPLICATION);
+        customerService.checkEmailDuplication(email);
         return ApiResponse.success("사용 가능한 이메일 입니다.");
     }
 
@@ -110,7 +93,7 @@ public class CustomerController {
      */
     @GetMapping("/customer/sign-up-nickname/{nickname}")
     public ApiResponse<?> customerCheckNicknameDuplication(@PathVariable String nickname) {
-        if (customerService.checkNicknameDuplication(nickname)) return ApiResponse.error("NICKNAME_DUPLICATION", ERROR_NICKNAME_DUPLICATION);
+        customerService.checkNicknameDuplication(nickname);
         return ApiResponse.success("사용 가능한 닉네임 입니다.");
     }
 }

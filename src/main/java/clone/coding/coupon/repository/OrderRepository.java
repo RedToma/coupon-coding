@@ -2,6 +2,7 @@ package clone.coding.coupon.repository;
 
 import clone.coding.coupon.entity.customer.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -15,6 +16,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o WHERE o.store.id = :storeId ORDER BY o.orderTime DESC")
     List<Order> findRecentOrdersByStore(@Param("storeId") Long storeId);
+
+    @Query("SELECT o FROM Order o WHERE o.customer.id = :customerId")
+    List<Order> findCustomerOrderList(@Param("customerId") Long customerId);
+
+    @Modifying
+    @Query("DELETE FROM Order o WHERE o.customer.id = :customerId")
+    void deleteByCustomerOrder(@Param("customerId") Long customerId);
 
     Optional<Order> findByIdAndCustomerId(Long orderId, Long customerId);
 
