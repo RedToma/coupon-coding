@@ -1,11 +1,13 @@
 package clone.coding.coupon.dto.order;
 
 import clone.coding.coupon.entity.customer.OrderMenu;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderFindByOrderMenuResponse {
 
     private String menuName;

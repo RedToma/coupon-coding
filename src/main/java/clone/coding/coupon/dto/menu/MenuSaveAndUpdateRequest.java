@@ -2,11 +2,13 @@ package clone.coding.coupon.dto.menu;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class MenuSaveAndUpdateRequest {
 
     @NotBlank(message = "메뉴 이름을 입력해 주세요.")

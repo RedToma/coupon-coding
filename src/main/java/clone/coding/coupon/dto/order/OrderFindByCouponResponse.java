@@ -1,6 +1,7 @@
 package clone.coding.coupon.dto.order;
 
 import clone.coding.coupon.entity.coupon.CouponWallet;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderFindByCouponResponse {
 
     private Long couponWalletId;

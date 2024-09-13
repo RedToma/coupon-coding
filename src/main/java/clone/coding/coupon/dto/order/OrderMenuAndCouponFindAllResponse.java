@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 public class OrderMenuAndCouponFindAllResponse {
-    // 주문 목록, 쿠폰 목록
 
     private List<OrderFindByOrderMenuResponse> orderMenu;
 

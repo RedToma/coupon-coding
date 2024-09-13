@@ -108,7 +108,6 @@ class CustomerControllerTest extends AbstractRestDocsTests {
     void testCustomerRemove() throws Exception {
         //when & then
         ResultActions result = mockMvc.perform(delete("/customer/withdraw")
-                .contentType(MediaType.APPLICATION_JSON)
                 .header("access", "JWT-Token"));
 
         result.andDo(print())
@@ -170,7 +169,7 @@ class CustomerControllerTest extends AbstractRestDocsTests {
 
         //when & then
         ResultActions result = mockMvc.perform(patch("/customer/info/address?address={address}", address)
-                .content(objectMapper.writeValueAsString(address))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .header("access", "JWT-Token"));
 
         result.andDo(print())
@@ -201,7 +200,6 @@ class CustomerControllerTest extends AbstractRestDocsTests {
 
         //when & then
         ResultActions result = mockMvc.perform(get("/customer/sign-up-email/{email}", email)
-                .content(objectMapper.writeValueAsString(email))
                 .header("access", "JWT-Token"));
 
         result.andDo(print())
@@ -233,7 +231,6 @@ class CustomerControllerTest extends AbstractRestDocsTests {
 
         //when & then
         ResultActions result = mockMvc.perform(get("/customer/sign-up-nickname/{nickname}", nickname)
-                .content(objectMapper.writeValueAsString(nickname))
                 .header("access", "JWT-Token"));
 
         result.andDo(print())
