@@ -26,8 +26,6 @@ out/
 src/main/resources/application.yml
 !**/src/main/**/out/
 !**/src/test/**/out/
-build/
-!build/docs/asciidoc/index.html
 
 ### NetBeans ###
 /nbproject/private/
