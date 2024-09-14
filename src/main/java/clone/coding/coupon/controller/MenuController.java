@@ -70,7 +70,7 @@ public class MenuController {
      * @param menuId
      * @return
      */
-    @DeleteMapping("/remove/{menuId}") // 로직 바꾸기 아예 안보이게 속성을 하나 더 만들던지 삭제는 안함
+    @DeleteMapping("/remove/{menuId}") // 로직 바꾸기 아예 안보이게 속성을 하나 더 만들던지 삭제는 안함1
     public ApiResponse<Object> menuRemove(@PathVariable Long menuId) {
         menuService.removeMenu(menuId);
         return ApiResponse.success("메뉴가 삭제 되었습니다.");
