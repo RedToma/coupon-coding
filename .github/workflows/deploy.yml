@@ -37,10 +37,12 @@ jobs:
       # 프로젝트 저장소에 업로드하면 안되는 설정 파일들을 만들어줍니다.
       - name: Make application.yml
         run: |
-          mkdir -p ./src/main/resources
-          echo "$APPLICATION" > ./src/main/resources/application.yml
+           cd ./src/main/resources
+           touch ./application.yml
+           echo "$APPLICATION" > ./application.yml
         env:
           APPLICATION: ${{ secrets.APPLICATION }}
+        shell: bash
 
       - name: Gradle 권한 부여
         run: chmod +x gradlew
