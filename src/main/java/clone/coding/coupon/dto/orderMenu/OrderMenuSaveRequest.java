@@ -3,11 +3,13 @@ package clone.coding.coupon.dto.orderMenu;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderMenuSaveRequest {
 
     @NotNull(message = "menuID를 입력해 주세요.")

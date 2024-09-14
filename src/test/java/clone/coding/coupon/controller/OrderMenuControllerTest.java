@@ -1,11 +1,17 @@
 package clone.coding.coupon.controller;
 
 import clone.coding.coupon.dto.CustomUserDetails;
-import clone.coding.coupon.dto.customer.CustomerPwUpdateRequest;
-import clone.coding.coupon.dto.customer.CustomerSaveRequest;
+import clone.coding.coupon.dto.menu.MenuSaveAndUpdateRequest;
+import clone.coding.coupon.dto.order.OrderFindByMenuNameResponse;
+import clone.coding.coupon.dto.order.OrderListFindAllResponse;
+import clone.coding.coupon.dto.order.OrderSaveRequest;
+import clone.coding.coupon.dto.orderMenu.OrderMenuFindAllResponse;
+import clone.coding.coupon.dto.orderMenu.OrderMenuSaveRequest;
 import clone.coding.coupon.entity.customer.Customer;
+import clone.coding.coupon.entity.customer.PaymentType;
+import clone.coding.coupon.entity.customer.StatusType;
 import clone.coding.coupon.restdocs.AbstractRestDocsTests;
-import clone.coding.coupon.service.CustomerService;
+import clone.coding.coupon.service.OrderMenuService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,25 +28,29 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.hamcrest.Matchers.nullValue;
+import java.util.List;
+
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
-class CustomerControllerTest extends AbstractRestDocsTests {
+class OrderMenuControllerTest extends AbstractRestDocsTests {
 
     @MockBean
-    private CustomerService customerService;
+    private OrderMenuService orderMenuService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -61,81 +71,20 @@ class CustomerControllerTest extends AbstractRestDocsTests {
                 .setAuthentication(new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities()));
     }
 
-
     @Test
-    @DisplayName("회원가입 테스트")
-    void testCustomerAdd() throws Exception {
+    @DisplayName("장바구니 추가 테스트")
+    void testOrderMenuAdd() throws Exception {
         //given
-        CustomerSaveRequest request = new CustomerSaveRequest();
-        request.setEmail("test@email.com");
-        request.setPassword("Password1!");
-        request.setNickname("testuser");
-        request.setAddress("서울");
-        request.setPhoneNum("010-1234-5678");
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = userDetails.getUsername();
+
+        OrderMenuSaveRequest request = new OrderMenuSaveRequest(1L, 2);
+
 
         //when & then
-        ResultActions result = mockMvc.perform(post("/customer/sign-up")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
+        Mockito.doNothing().when(orderMenuService).addOrderMenu(request, email);
 
-        result.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data").value("회원가입이 완료되었습니다."))
-                .andExpect(jsonPath("$.error", is(nullValue())))
-                .andDo(document("{class-name}/{method-name}",
-                        preprocessRequest(Preprocessors.prettyPrint()),
-                        preprocessResponse(Preprocessors.prettyPrint()),
-                        requestFields(
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("회원 비밀번호"),
-                                fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
-                                fieldWithPath("address").type(JsonFieldType.STRING).description("회원 주소"),
-                                fieldWithPath("phoneNum").type(JsonFieldType.STRING).description("회원 휴대폰 번호")
-                        ),
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-                                fieldWithPath("data").type(JsonFieldType.STRING).description("결과 메시지"),
-                                fieldWithPath("error").type(JsonFieldType.NULL).description("오류 여부"),
-                                fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("서버 처리 시간")
-                        )
-                ));
-    }
-
-
-    @Test
-    @DisplayName("회원탈퇴 테스트")
-    void testCustomerRemove() throws Exception {
-        //when & then
-        ResultActions result = mockMvc.perform(delete("/customer/withdraw")
-                .header("access", "JWT-Token"));
-
-        result.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data").value("회원탈퇴 되었습니다."))
-                .andExpect(jsonPath("$.error", is(nullValue())))
-                .andDo(document("{class-name}/{method-name}",
-                        preprocessRequest(Preprocessors.prettyPrint()),
-                        preprocessResponse(Preprocessors.prettyPrint()),
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-                                fieldWithPath("data").type(JsonFieldType.STRING).description("결과 메시지"),
-                                fieldWithPath("error").type(JsonFieldType.NULL).description("오류 여부"),
-                                fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("서버 처리 시간")
-                        )
-                ));
-    }
-
-    @Test
-    @DisplayName("비밀번호 변경 테스트")
-    void testCustomerPwModify() throws Exception {
-        //given
-        CustomerPwUpdateRequest request = new CustomerPwUpdateRequest();
-        request.setPassword("newPassword1!");
-
-        //when & then
-        ResultActions result = mockMvc.perform(patch("/customer/info/pw-change")
+        ResultActions result = mockMvc.perform(post("/order-menu/new")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("access", "JWT-Token")
                 .content(objectMapper.writeValueAsString(request)));
@@ -143,14 +92,11 @@ class CustomerControllerTest extends AbstractRestDocsTests {
         result.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data").value("비밀번호가 변경되었습니다."))
+                .andExpect(jsonPath("$.data").value("장바구니에 추가 되었습니다."))
                 .andExpect(jsonPath("$.error", is(nullValue())))
                 .andDo(document("{class-name}/{method-name}",
                         preprocessRequest(Preprocessors.prettyPrint()),
                         preprocessResponse(Preprocessors.prettyPrint()),
-                        requestFields(
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("변경할 비밀번호")
-                        ),
                         responseFields(
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 fieldWithPath("data").type(JsonFieldType.STRING).description("결과 메시지"),
@@ -158,30 +104,87 @@ class CustomerControllerTest extends AbstractRestDocsTests {
                                 fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("서버 처리 시간")
                         )
                 ));
-
     }
 
     @Test
-    @DisplayName("주소 변경 테스트")
-    void testCustomerAddressModify() throws Exception {
+    @DisplayName("장바구니 조회 테스트")
+    void testOrderMenuList() throws Exception {
         //given
-        String address = "인천";
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = userDetails.getUsername();
+
+        List<OrderMenuFindAllResponse> response = List.of(
+                new OrderMenuFindAllResponse(1L, 10L, "후라이드 치킨", 1, 23000),
+                new OrderMenuFindAllResponse(2L, 9L, "양념 치킨", 2, 48000)
+        );
+
+
+        Mockito.when(orderMenuService.findOrderMenu(email)).thenReturn(response);
 
         //when & then
-        ResultActions result = mockMvc.perform(patch("/customer/info/address?address={address}", address)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        ResultActions result = mockMvc.perform(get("/order-menu/list")
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("access", "JWT-Token"));
 
         result.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data").value("주소가 변경되었습니다."))
+                .andExpect(jsonPath("$.data[0].orderMenuId").value(1))
+                .andExpect(jsonPath("$.data[0].menuId").value(10))
+                .andExpect(jsonPath("$.data[0].menuName").value("후라이드 치킨"))
+                .andExpect(jsonPath("$.data[0].menuCnt").value(1))
+                .andExpect(jsonPath("$.data[0].menuPrice").value(23000))
+                .andExpect(jsonPath("$.data[1].orderMenuId").value(2))
+                .andExpect(jsonPath("$.data[1].menuId").value(9))
+                .andExpect(jsonPath("$.data[1].menuName").value("양념 치킨"))
+                .andExpect(jsonPath("$.data[1].menuCnt").value(2))
+                .andExpect(jsonPath("$.data[1].menuPrice").value(48000))
+                .andExpect(jsonPath("$.error", is(nullValue())))
+                .andDo(document("{class-name}/{method-name}",
+                        preprocessRequest(Preprocessors.prettyPrint()),
+                        preprocessResponse(Preprocessors.prettyPrint()),
+                        responseFields(
+                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
+                                fieldWithPath("data[].orderMenuId").type(JsonFieldType.NUMBER).description("장바구니 ID번호"),
+                                fieldWithPath("data[].menuId").type(JsonFieldType.NUMBER).description("메뉴 ID번호"),
+                                fieldWithPath("data[].menuName").type(JsonFieldType.STRING).description("메뉴 이름"),
+                                fieldWithPath("data[].menuCnt").type(JsonFieldType.NUMBER).description("메뉴 수량"),
+                                fieldWithPath("data[].menuPrice").type(JsonFieldType.NUMBER).description("메뉴 가격"),
+                                fieldWithPath("error").type(JsonFieldType.NULL).description("오류 여부"),
+                                fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("서버 처리 시간")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("장바구니 수량 변경 테스트")
+    void testOrderMenuModify() throws Exception {
+        //given
+        Long orderMenuId = 1L;
+        int menuCnt = 3;
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = userDetails.getUsername();
+
+        //when & then
+        Mockito.doNothing().when(orderMenuService).modifyOrderMenu(email, menuCnt, orderMenuId);
+
+        ResultActions result = mockMvc.perform(patch("/order-menu/update/{orderMenuId}?menuCnt={menuCnt}", orderMenuId, menuCnt)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("access", "JWT-Token"));
+
+        result.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").value("수량이 변경 되었습니다."))
                 .andExpect(jsonPath("$.error", is(nullValue())))
                 .andDo(document("{class-name}/{method-name}",
                         preprocessRequest(Preprocessors.prettyPrint()),
                         preprocessResponse(Preprocessors.prettyPrint()),
                         queryParameters(
-                                parameterWithName("address").description("변경할 주소")
+                                parameterWithName("menuCnt").description("변경할 메뉴 수량")
+                        ),
+                        pathParameters(
+                                parameterWithName("orderMenuId").description("장바구니 ID번호")
                         ),
                         responseFields(
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
@@ -193,56 +196,29 @@ class CustomerControllerTest extends AbstractRestDocsTests {
     }
 
     @Test
-    @DisplayName("이메일 중복 테스트")
-    void testCustomerCheckEmailDuplication() throws Exception {
+    @DisplayName("장바구니 선택 메뉴 삭제 테스트")
+    void testOrderMenuRemove() throws Exception {
         //given
-        String email = "test@email.com";
+        Long orderMenuId = 1L;
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = userDetails.getUsername();
 
         //when & then
-        ResultActions result = mockMvc.perform(get("/customer/sign-up-email/{email}", email)
+        Mockito.doNothing().when(orderMenuService).removeOrderMenu(email, orderMenuId);
+        ResultActions result = mockMvc.perform(delete("/order-menu/remove/{orderMenuId}", orderMenuId)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("access", "JWT-Token"));
 
         result.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data").value("사용 가능한 이메일 입니다."))
+                .andExpect(jsonPath("$.data").value("선택한 메뉴가 삭제 되었습니다."))
                 .andExpect(jsonPath("$.error", is(nullValue())))
                 .andDo(document("{class-name}/{method-name}",
                         preprocessRequest(Preprocessors.prettyPrint()),
                         preprocessResponse(Preprocessors.prettyPrint()),
                         pathParameters(
-                                parameterWithName("email").description("중복 확인할 이메일")
-                        ),
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-                                fieldWithPath("data").type(JsonFieldType.STRING).description("결과 메시지"),
-                                fieldWithPath("error").type(JsonFieldType.NULL).description("오류 여부"),
-                                fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("서버 처리 시간")
-                        )
-                ));
-
-    }
-
-    @Test
-    @DisplayName("닉네임 중복 테스트")
-    void testCustomerCheckNicknameDuplication() throws Exception {
-        //given
-        String nickname = "testuser";
-
-        //when & then
-        ResultActions result = mockMvc.perform(get("/customer/sign-up-nickname/{nickname}", nickname)
-                .header("access", "JWT-Token"));
-
-        result.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data").value("사용 가능한 닉네임 입니다."))
-                .andExpect(jsonPath("$.error", is(nullValue())))
-                .andDo(document("{class-name}/{method-name}",
-                        preprocessRequest(Preprocessors.prettyPrint()),
-                        preprocessResponse(Preprocessors.prettyPrint()),
-                        pathParameters(
-                                parameterWithName("nickname").description("중복 확인할 닉네임")
+                                parameterWithName("orderMenuId").description("장바구니 ID번호")
                         ),
                         responseFields(
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),

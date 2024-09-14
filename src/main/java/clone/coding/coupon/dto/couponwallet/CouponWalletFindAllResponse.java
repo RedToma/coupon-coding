@@ -2,6 +2,7 @@ package clone.coding.coupon.dto.couponwallet;
 
 import clone.coding.coupon.entity.coupon.CouponWallet;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CouponWalletFindAllResponse {
 
