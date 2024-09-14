@@ -36,4 +36,4 @@ src/main/resources/application.yml
 
 ### VS Code ###
 .vscode/
-!/build/docs/asciidoc/index.html
+!build/docs/asciidoc/index.html
