@@ -54,19 +54,21 @@ public class OrderMenuService {
     }
 
     @Transactional
-    public void modifyOrderMenu(int menuCnt, Long orderMenuId) {
-        OrderMenu orderMenu = findOrderMenu(orderMenuId);
+    public void modifyOrderMenu(String email, int menuCnt, Long orderMenuId) {
+        Customer customer = findCustomerByEmail(email);
+        OrderMenu orderMenu = findOrderMenu(customer, orderMenuId);
         orderMenu.changeMenuCnt(menuCnt);
     }
 
     @Transactional
-    public void removeOrderMenu(Long orderMenuId) {
-        OrderMenu orderMenu = findOrderMenu(orderMenuId);
+    public void removeOrderMenu(String email, Long orderMenuId) {
+        Customer customer = findCustomerByEmail(email);
+        OrderMenu orderMenu = findOrderMenu(customer, orderMenuId);
         orderMenuRepository.delete(orderMenu);
     }
 
-    private OrderMenu findOrderMenu(Long orderMenuId) {
-        return orderMenuRepository.findById(orderMenuId)
+    private OrderMenu findOrderMenu(Customer customer, Long orderMenuId) {
+        return orderMenuRepository.findOrderMenuByCustomerIdAndOrderMenuId(customer.getId(), orderMenuId)
                 .orElseThrow(() -> new ResourceNotFoundException(ERROR_ORDER_MENU_NOT_FOUND));
     }
 

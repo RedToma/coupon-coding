@@ -49,7 +49,7 @@ public class CouponWalletController {
                                                    BindingResult bindingResult,
                                                    @RequestParam Long couponQuantity) {
         couponWalletService.addCouponCode(couponSaveRequest, couponQuantity);
-        return ApiResponse.success("쿠폰코드가 발급되었습니다.");
+        return ApiResponse.success("쿠폰코드가 발행되었습니다.");
     }
 
     /**

@@ -4,14 +4,15 @@ import clone.coding.coupon.entity.coupon.DiscountType;
 import clone.coding.coupon.entity.coupon.IssuerType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CouponSaveRequest {
 

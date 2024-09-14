@@ -58,8 +58,8 @@ public class OrderMenuController {
      * @return
      */
     @PatchMapping("/update/{orderMenuId}")
-    public ApiResponse<Object> orderMenuModify(@RequestParam int menuCnt, @PathVariable Long orderMenuId) {
-        orderMenuService.modifyOrderMenu(menuCnt, orderMenuId);
+    public ApiResponse<Object> orderMenuModify(@AuthenticationPrincipal UserDetails userDetails, @RequestParam int menuCnt, @PathVariable Long orderMenuId) {
+        orderMenuService.modifyOrderMenu(userDetails.getUsername(), menuCnt, orderMenuId);
         return ApiResponse.success("수량이 변경 되었습니다.");
     }
 
@@ -70,8 +70,8 @@ public class OrderMenuController {
      * @return
      */
     @DeleteMapping("/remove/{orderMenuId}")
-    public ApiResponse<Object> orderMenuRemove(@PathVariable Long orderMenuId) {
-        orderMenuService.removeOrderMenu(orderMenuId);
+    public ApiResponse<Object> orderMenuRemove(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long orderMenuId) {
+        orderMenuService.removeOrderMenu(userDetails.getUsername(), orderMenuId);
         return ApiResponse.success("선택한 메뉴가 삭제 되었습니다.");
     }
 }

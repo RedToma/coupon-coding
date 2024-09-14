@@ -182,6 +182,45 @@ include::{snippets}/menu-controller-test/test-menu-remove/http-request.adoc[]
 ==== Http-Response
 include::{snippets}/menu-controller-test/test-menu-remove/http-response.adoc[]
 
+== *OrderMenuController*
+=== 1. 장바구니 추가
+==== Response-Parameter
+include::{snippets}/order-menu-controller-test/test-order-menu-add/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/order-menu-controller-test/test-order-menu-add/http-request.adoc[]
+==== Http-Response
+include::{snippets}/order-menu-controller-test/test-order-menu-add/http-response.adoc[]
+
+=== 2. 장바구니 조회
+==== Response-Parameter
+include::{snippets}/order-menu-controller-test/test-order-menu-list/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/order-menu-controller-test/test-order-menu-list/http-request.adoc[]
+==== Http-Response
+include::{snippets}/order-menu-controller-test/test-order-menu-list/http-response.adoc[]
+
+=== 3. 장바구니 수량 변경
+==== Request-PathParameter
+include::{snippets}/order-menu-controller-test/test-order-menu-modify/path-parameters.adoc[]
+==== Request-Parameter
+include::{snippets}/order-menu-controller-test/test-order-menu-modify/query-parameters.adoc[]
+==== Response-Parameter
+include::{snippets}/order-menu-controller-test/test-order-menu-modify/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/order-menu-controller-test/test-order-menu-modify/http-request.adoc[]
+==== Http-Response
+include::{snippets}/order-menu-controller-test/test-order-menu-modify/http-response.adoc[]
+
+=== 4. 장바구니 선택 메뉴 삭제
+==== Request-PathParameter
+include::{snippets}/order-menu-controller-test/test-order-menu-remove/path-parameters.adoc[]
+==== Response-Parameter
+include::{snippets}/order-menu-controller-test/test-order-menu-remove/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/order-menu-controller-test/test-order-menu-remove/http-request.adoc[]
+==== Http-Response
+include::{snippets}/order-menu-controller-test/test-order-menu-remove/http-response.adoc[]
+
 == *OrderController*
 === 1. 주문 생성
 ==== Response-Parameter
@@ -283,3 +322,63 @@ include::{snippets}/admin-controller-test/test-admin-remove/response-fields.adoc
 include::{snippets}/admin-controller-test/test-admin-remove/http-request.adoc[]
 ==== Http-Response
 include::{snippets}/admin-controller-test/test-admin-remove/http-response.adoc[]
+
+== *CouponController*
+=== 1. 어드민 쿠폰 발행
+==== Response-Parameter
+include::{snippets}/coupon-controller-test/coupon-admin-add/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/coupon-controller-test/coupon-admin-add/http-request.adoc[]
+==== Http-Response
+include::{snippets}/coupon-controller-test/coupon-admin-add/http-response.adoc[]
+
+=== 2. 브랜드 쿠폰 발행
+==== Response-Parameter
+include::{snippets}/coupon-controller-test/coupon-brand-add/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/coupon-controller-test/coupon-brand-add/http-request.adoc[]
+==== Http-Response
+include::{snippets}/coupon-controller-test/coupon-brand-add/http-response.adoc[]
+
+=== 3. 스토어 쿠폰 발행
+==== Response-Parameter
+include::{snippets}/coupon-controller-test/coupon-store-add/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/coupon-controller-test/coupon-store-add/http-request.adoc[]
+==== Http-Response
+include::{snippets}/coupon-controller-test/coupon-store-add/http-response.adoc[]
+
+== *CouponWalletController*
+=== 1. 쿠폰 발급 (클릭)
+==== Request-PathParameter
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-add/path-parameters.adoc[]
+==== Response-Parameter
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-add/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-add/http-request.adoc[]
+==== Http-Response
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-add/http-response.adoc[]
+
+=== 2. 쿠폰 코드 발행
+==== Response-Parameter
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-code-add/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-code-add/http-request.adoc[]
+==== Http-Response
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-code-add/http-response.adoc[]
+
+=== 3. 쿠폰 코드 업데이트(고객 입력)
+==== Response-Parameter
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-code-modify/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-code-modify/http-request.adoc[]
+==== Http-Response
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-code-modify/http-response.adoc[]
+
+=== 4. 쿠폰 리스트 조회
+==== Response-Parameter
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-list/response-fields.adoc[]
+==== Http-Request
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-list/http-request.adoc[]
+==== Http-Response
+include::{snippets}/coupon-wallet-controller-test/test-coupon-wallet-list/http-response.adoc[]
