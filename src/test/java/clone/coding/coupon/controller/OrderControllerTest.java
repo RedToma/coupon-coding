@@ -177,7 +177,7 @@ class OrderControllerTest extends AbstractRestDocsTests {
         );
 
         List<OrderListFindAllResponse> response = List.of(
-                new OrderListFindAllResponse(47000, StatusType.DELIVERED, "2024-09-14 00:19", "BHC 송도1동", menuNameResponses)
+                new OrderListFindAllResponse(47000, "첫 주문 이벤트 쿠폰", StatusType.DELIVERED, "2024-09-14 00:19", "BHC 송도1동", menuNameResponses)
         );
 
 
@@ -191,6 +191,7 @@ class OrderControllerTest extends AbstractRestDocsTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data[0].totalAmount").value(47000))
+                .andExpect(jsonPath("$.data[0].usedCouponName").value("첫 주문 이벤트 쿠폰"))
                 .andExpect(jsonPath("$.data[0].statusType").value("DELIVERED"))
                 .andExpect(jsonPath("$.data[0].orderTime").value("2024-09-14 00:19"))
                 .andExpect(jsonPath("$.data[0].storeName").value("BHC 송도1동"))
@@ -203,6 +204,7 @@ class OrderControllerTest extends AbstractRestDocsTests {
                         responseFields(
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 fieldWithPath("data[].totalAmount").type(JsonFieldType.NUMBER).description("총 주문 금액"),
+                                fieldWithPath("data[].usedCouponName").type(JsonFieldType.STRING).description("사용한 쿠폰"),
                                 fieldWithPath("data[].statusType").type(JsonFieldType.STRING).description("주문 상태"),
                                 fieldWithPath("data[].orderTime").type(JsonFieldType.STRING).description("주문 시간"),
                                 fieldWithPath("data[].storeName").type(JsonFieldType.STRING).description("지점 이름"),
