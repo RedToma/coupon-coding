@@ -17,6 +17,8 @@ public class OrderListFindAllResponse {
 
     private int totalAmount;
 
+    private String usedCouponName;
+
     private StatusType statusType;
 
     private String orderTime;
@@ -27,6 +29,7 @@ public class OrderListFindAllResponse {
 
     public OrderListFindAllResponse(Order order) {
         totalAmount = order.getTotalAmount();
+        usedCouponName = order.getUsedCouponName();
         statusType = order.getStatusType();
         orderTime = order.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         storeName = order.getStore().getStoreName();

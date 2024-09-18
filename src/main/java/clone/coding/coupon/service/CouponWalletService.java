@@ -37,18 +37,7 @@ public class CouponWalletService {
         Customer customer = findCustomer(email);
         Coupon coupon = findAndLockCouponById(couponId);
 
-        if (!couponExpirationDateCheck(coupon)) {
-            coupon.couponExpired();
-            throw new ResourceNotFoundException(ERROR_COUPON_ISSUE_PERIOD);
-        }
-
-        if (!couponQuantityCheck(coupon)) {
-            throw new ResourceNotFoundException(ERROR_COUPON_QUANTITY_EXCEEDED);
-        }
-
-        if (!couponsNumberCheck(customer, coupon)) {
-            throw new ResourceNotFoundException(ERROR_COUPON_NO_LONGER_ISSUABLE);
-        }
+        verifyCouponIssuanceConditions(coupon, customer);
 
         coupon.couponIssuedComplete();
 
@@ -78,11 +67,11 @@ public class CouponWalletService {
         Coupon coupon = findCoupon(couponWallet.getCoupon().getId());
         Customer customer = findCustomer(email);
 
-        if (!couponsNumberCheck(customer, coupon)) {
-            throw new ResourceNotFoundException(ERROR_COUPON_NO_LONGER_ISSUABLE);
-        }
+        verifyCouponIssuanceConditions(coupon, customer);
 
         couponWallet.customerInfoUpdate(customer);
+        customer.addCouponWallets(couponWallet);
+        coupon.couponIssuedComplete();
     }
 
     public List<CouponWalletFindAllResponse> findCouponWallet(String email) {
@@ -108,6 +97,20 @@ public class CouponWalletService {
         }
     }
 
+    private void verifyCouponIssuanceConditions(Coupon coupon, Customer customer) {
+        if (!couponExpirationDateCheck(coupon)) {
+            coupon.couponExpired();
+            throw new ResourceNotFoundException(ERROR_COUPON_ISSUE_PERIOD);
+        }
+
+        if (!couponQuantityCheck(coupon)) {
+            throw new ResourceNotFoundException(ERROR_COUPON_QUANTITY_EXCEEDED);
+        }
+
+        if (!couponsNumberCheck(customer, coupon)) {
+            throw new ResourceNotFoundException(ERROR_COUPON_NO_LONGER_ISSUABLE);
+        }
+    }
 
     private boolean couponExpirationDateCheck(Coupon coupon) {
         LocalDateTime now = LocalDateTime.now();

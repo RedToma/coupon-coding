@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface OrderMenuRepository extends JpaRepository<OrderMenu, Long> {
 
-    @Query("SELECT o FROM OrderMenu o WHERE o.customer.id = :customerId AND o.orderStatus = :orderStatus ")
+    @Query("SELECT o FROM OrderMenu o WHERE o.customer.id = :customerId AND o.orderStatus = :orderStatus AND o.menu.soldout = FALSE")
     List<OrderMenu> customerOrderMenuList(@Param("customerId") Long customerId, @Param("orderStatus") OrderStatus orderStatus);
 
     @Query("SELECT o FROM OrderMenu o WHERE o.customer.id = :customerId AND o.id = :orderMenuId")

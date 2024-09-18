@@ -33,4 +33,8 @@ public class Menu extends BaseTimeEntity {
         price = menuSaveAndUpdateRequest.getPrice();
         soldout = menuSaveAndUpdateRequest.isSoldout();
     }
+
+    public void menuDelete() {
+        soldout = true;
+    }
 }

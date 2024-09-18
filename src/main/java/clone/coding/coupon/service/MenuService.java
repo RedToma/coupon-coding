@@ -58,7 +58,7 @@ public class MenuService {
     @Transactional
     public void removeMenu(Long menuId) {
         Menu menu = findMenu(menuId);
-        menuRepository.delete(menu);
+        menu.menuDelete();
     }
 
     private Menu findMenu(Long menuId) {

@@ -32,6 +32,12 @@ public class SecurityConfiguration {
     private final RefreshRepository refreshRepository;
     private final JWTUtil jwtUtil;
 
+    private static final String[] URLS = {
+            "/docs/**", "/login", "/customer/sign-up", "/reissue", "/brand/**", "/store/**", "/menu/**", "/admin/**", "/coupon/**",
+            "/order/cooking-update/{orderId}", "/order/delivering-update/{orderId}", "/order/delivered-update/{orderId}", "/order/cancel-update/{orderId}",
+            "/customer/sign-up-email/{email}", "/customer/sign-up-nickname/{nickname}", "/couponwallet/couponcode/create", "/order/store/list/{storeId}"
+    };
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -50,13 +56,7 @@ public class SecurityConfiguration {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/customer/sign-up", "/reissue").permitAll()
-                        .requestMatchers("/brand/**", "/store/**", "/menu/**", "/admin/**", "/coupon/**").permitAll()
-                        .requestMatchers("/order/store/list/{storeId}").permitAll()
-                        .requestMatchers("/couponwallet/couponcode/create").permitAll()
-                        .requestMatchers("/customer/sign-up-email/{email}", "/customer/sign-up-nickname/{nickname}").permitAll()
-                        .requestMatchers("/cooking-update/{orderId}", "/delivering-update/{orderId}", "/delivered-update/{orderId}", "/cancel-update/{orderId}").permitAll()
-                        .requestMatchers("/docs/**").permitAll()
+                        .requestMatchers(URLS).permitAll()
                         .anyRequest().authenticated());
 
         http

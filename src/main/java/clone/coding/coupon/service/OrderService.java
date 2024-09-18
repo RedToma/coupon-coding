@@ -202,7 +202,10 @@ public class OrderService {
         Long brandId = couponWallet.getCoupon().getBrandId();
         Long storeId = couponWallet.getCoupon().getStoreId();
         Long omStoreId = orderMenu.getMenu().getStore().getId();
-        Long omBrandId = orderMenu.getMenu().getStore().getBrand().getId();
+        Long omBrandId = orderMenu.getMenu().getStore().getBrand() != null
+                ? orderMenu.getMenu().getStore().getBrand().getId()
+                : null;
+//        Long omBrandId = orderMenu.getMenu().getStore().getBrand().getId();
         Long minOrderPrice = couponWallet.getCoupon().getMinOrderPrice();
 
         if (!couponWallet.isUseYn()
