@@ -59,5 +59,4 @@ public class CouponController {
         couponService.addStoreCoupon(couponSaveRequest);
         return ApiResponse.success("스토어 쿠폰이 정상적으로 발급되었습니다.");
     }
-
 }
