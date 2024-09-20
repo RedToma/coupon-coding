@@ -38,13 +38,10 @@ public class Coupon extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private IssuerType issuerType;
 
-    //admin_id
     private Long issuerCode;
 
-    //issuerType brand일때 해당 브랜드에서만 쿠폰 사용가능하게
     private Long brandId;
 
-    //issuerType store일때 해당 지점에서만 쿠폰 사용가능하게
     private Long storeId;
 
     private int maxCnt;

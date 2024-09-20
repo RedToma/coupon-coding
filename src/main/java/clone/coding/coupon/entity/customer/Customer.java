@@ -57,4 +57,8 @@ public class Customer extends BaseTimeEntity {
         this.password = password;
         this.role = role;
     }
+
+    public Customer(String email) {
+        this.email = email;
+    }
 }

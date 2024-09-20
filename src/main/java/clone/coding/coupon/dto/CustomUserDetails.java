@@ -10,7 +10,6 @@ import java.util.Collection;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
-    // 로그인 관련 여러개 만들생각이였는데 고민
 
     private final Customer customer;
 

@@ -6,7 +6,6 @@ import clone.coding.coupon.entity.customer.Customer;
 import clone.coding.coupon.entity.customer.Order;
 import clone.coding.coupon.entity.orderhistory.DeletedMemberOrders;
 import clone.coding.coupon.global.exception.ResourceNotFoundException;
-import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static clone.coding.coupon.global.exception.error.ErrorCode.*;
 
@@ -45,15 +43,6 @@ public class CustomerService {
 
         customerRepository.save(customer);
     }
-
-//    public void findCustomer(CustomerLoginRequest customerLoginRequest) {
-//        Customer customer = customerRepository.findByEmail(customerLoginRequest.getEmail())
-//                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
-//
-//        if(!encoder.matches(customerLoginRequest.getPassword(), customer.getPassword())) {
-//            throw new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다.");
-//        }
-//    }
 
     @Transactional
     public void removeCustomer(String email) {

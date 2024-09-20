@@ -122,7 +122,7 @@ public class OrderController {
      * @return
      */
     @PatchMapping("/cancel-update/{orderId}")
-    public ApiResponse<Object> orderStatusToCancelModify(@PathVariable Long orderId) { //이미 주문상태가 취소되어있으면 못하게
+    public ApiResponse<Object> orderStatusToCancelModify(@PathVariable Long orderId) {
         orderService.modifyOrderStatusToCancel(orderId);
         return ApiResponse.success("가게 사정으로 인해 주문이 취소 되었습니다.");
     }

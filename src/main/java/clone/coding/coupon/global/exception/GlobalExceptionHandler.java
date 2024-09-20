@@ -27,15 +27,6 @@ public class GlobalExceptionHandler {
         return ApiResponse.error("INVALID_INPUT_VALUE", errorMessage);
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException ex) {
-//        String[] split = ex.getMessage().split(": ");
-//        String errorCode = split[0];
-//        String errorMessage = split[1];
-//        return ApiResponse.error(errorCode, errorMessage);
-//    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ResourceNotFoundException.class)
     public ApiResponse<?> handleResourceNotFoundException(ResourceNotFoundException ex) {
