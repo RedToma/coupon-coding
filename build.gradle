@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.2.8'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'jacoco'
 }
 
 group = 'clone.coding'
@@ -52,6 +53,7 @@ dependencies {
 tasks.named('test') {
 	outputs.dir snippetsDir
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
 }
 
 tasks.named('asciidoctor') {
@@ -71,45 +73,38 @@ bootJar {
 	}
 }
 
-subprojects {
-	// 다른 부분은 생략
-	apply plugin: 'jacoco'
-	jacoco {
-		toolVersion = '0.8.8'
+jacoco {
+	toolVersion = '0.8.8'
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required.set(true)
+		xml.outputLocation.set(file("${buildDir}/reports/jacoco/jacoco.xml"))
+
+		html.required.set(true)
+		html.outputLocation.set(file("${buildDir}/reports/jacoco/html"))
+
+		csv.required.set(true)
+		csv.outputLocation.set(file("${buildDir}/reports/jacoco/jacoco.csv"))
 	}
-	jacocoTestReport {
-		dependsOn test
-		reports {
-			html.enabled true // html 설정
-			csv.enabled true // csv 설정
-			xml.enabled true
-			//xml 의 위치 조정
-			xml.destination file("${buildDir}/reports/jacoco.xml")
-		}
-		def Qdomains = []
-		for (qPattern in '/QA'..'/QZ') { // qPattern = '/QA', '/QB', ... '.QZ'
-			Qdomains.add(qPattern + '')
-		}
-		afterEvaluate {
-			classDirectories.setFrom(
-					files(classDirectories.files.collect {
-						fileTree(dir: it, excludes: [
-								// 측정 안하고 싶은 패턴
-								"/Application",
-								"/Config",
-								"/Dto",
-								"/Request",
-								"/Response",
-								"/Interceptor",
-								"*/Exception*"
-								// Querydsl 관련 제거
-						] + Qdomains)
-					})
-			)
-		}
-	}
-	test {
-		useJUnitPlatform()
-		finalizedBy jacocoTestReport
-	}
+	classDirectories.setFrom(
+			files(classDirectories.files.collect {
+				fileTree(dir: it, excludes: [
+						"/Application",
+						"/Config",
+						"/Dto",
+						"/Request",
+						"/Response",
+						"/Interceptor",
+						"*/Exception*"
+				])
+			})
+	)
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
 }

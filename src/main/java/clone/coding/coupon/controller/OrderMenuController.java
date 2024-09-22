@@ -1,7 +1,7 @@
 package clone.coding.coupon.controller;
 
-import clone.coding.coupon.dto.orderMenu.OrderMenuFindAllResponse;
-import clone.coding.coupon.dto.orderMenu.OrderMenuSaveRequest;
+import clone.coding.coupon.dto.ordermenu.OrderMenuFindAllResponse;
+import clone.coding.coupon.dto.ordermenu.OrderMenuSaveRequest;
 import clone.coding.coupon.global.ApiResponse;
 import clone.coding.coupon.service.OrderMenuService;
 import jakarta.validation.Valid;

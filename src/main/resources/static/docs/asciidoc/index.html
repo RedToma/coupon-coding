@@ -645,7 +645,7 @@ Content-Length: 137
   "success" : true,
   "data" : "회원가입이 완료되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:41"
 }</code></pre>
 </div>
 </div>
@@ -714,7 +714,7 @@ Content-Length: 128
   "success" : true,
   "data" : "회원탈퇴 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:41"
 }</code></pre>
 </div>
 </div>
@@ -829,7 +829,7 @@ Content-Length: 137
   "success" : true,
   "data" : "비밀번호가 변경되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:41"
 }</code></pre>
 </div>
 </div>
@@ -837,20 +837,6 @@ Content-Length: 137
 </div>
 <div class="sect2">
 <h3 id="_4_주소_변경">4. 주소 변경</h3>
-<div class="sect3">
-<h4 id="_request_pathparameter">Request-PathParameter</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /customer/info/address?address=%EC%9D%B8%EC%B2%9C HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-access: JWT-Token
-Host: localhost:8080
-Content-Length: 26
-
-address=%EC%9D%B8%EC%B2%9C</code></pre>
-</div>
-</div>
-</div>
 <div class="sect3">
 <h4 id="_request_parameter_3">Request-Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
@@ -937,7 +923,7 @@ Content-Length: 131
   "success" : true,
   "data" : "주소가 변경되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:41"
 }</code></pre>
 </div>
 </div>
@@ -946,7 +932,7 @@ Content-Length: 131
 <div class="sect2">
 <h3 id="_5_이메일_중복_확인">5. 이메일 중복 확인</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_2">Request-PathParameter</h4>
+<h4 id="_request_pathparameter">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /customer/sign-up-email/{email}</caption>
 <colgroup>
@@ -1019,7 +1005,7 @@ Content-Length: 136
   "success" : true,
   "data" : "사용 가능한 이메일 입니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:41"
 }</code></pre>
 </div>
 </div>
@@ -1028,7 +1014,7 @@ Content-Length: 136
 <div class="sect2">
 <h3 id="_6_닉네임_중복_확인">6. 닉네임 중복 확인</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_3">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_2">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 2. /customer/sign-up-nickname/{nickname}</caption>
 <colgroup>
@@ -1100,7 +1086,7 @@ Content-Length: 136
   "success" : true,
   "data" : "사용 가능한 닉네임 입니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:41"
 }</code></pre>
 </div>
 </div>
@@ -1195,7 +1181,7 @@ Content-Length: 134
   "success" : true,
   "data" : "브랜드가 생성되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:54"
+  "serverDateTime" : "2024-09-22 22:32:37"
 }</code></pre>
 </div>
 </div>
@@ -1296,7 +1282,7 @@ Content-Length: 181
     "brand" : "BHC"
   } ],
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:54"
+  "serverDateTime" : "2024-09-22 22:32:37"
 }</code></pre>
 </div>
 </div>
@@ -1305,7 +1291,7 @@ Content-Length: 181
 <div class="sect2">
 <h3 id="_3_브랜드_이름_변경">3. 브랜드 이름 변경</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_4">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_3">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 3. /brand/rename-brand/{brandId}</caption>
 <colgroup>
@@ -1408,7 +1394,7 @@ Content-Length: 138
   "success" : true,
   "data" : "브랜드 이름을 변경했습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:54"
+  "serverDateTime" : "2024-09-22 22:32:37"
 }</code></pre>
 </div>
 </div>
@@ -1417,7 +1403,7 @@ Content-Length: 138
 <div class="sect2">
 <h3 id="_4_브랜드_폐업">4. 브랜드 폐업</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_5">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_4">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 4. /brand/close-brand/{brandId}</caption>
 <colgroup>
@@ -1498,7 +1484,7 @@ Content-Length: 134
   "success" : true,
   "data" : "브랜드가 폐업되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:54"
+  "serverDateTime" : "2024-09-22 22:32:37"
 }</code></pre>
 </div>
 </div>
@@ -1512,7 +1498,7 @@ Content-Length: 134
 <div class="sect2">
 <h3 id="_1_지점_추가">1. 지점 추가</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_6">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_5">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 5. /store/new/{brandId}</caption>
 <colgroup>
@@ -1601,7 +1587,7 @@ Content-Length: 131
   "success" : true,
   "data" : "지점이 추가되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:43"
 }</code></pre>
 </div>
 </div>
@@ -1709,7 +1695,7 @@ Content-Length: 263
     "address" : "송도"
   } ],
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:43"
 }</code></pre>
 </div>
 </div>
@@ -1718,7 +1704,7 @@ Content-Length: 263
 <div class="sect2">
 <h3 id="_3_지점_정보_변경">3. 지점 정보 변경</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_7">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_6">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. /store/info/{storeId}</caption>
 <colgroup>
@@ -1807,7 +1793,7 @@ Content-Length: 138
   "success" : true,
   "data" : "지점 정보가 변경되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:43"
 }</code></pre>
 </div>
 </div>
@@ -1816,7 +1802,7 @@ Content-Length: 138
 <div class="sect2">
 <h3 id="_4_지점_폐업">4. 지점 폐업</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_8">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_7">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 7. /store/close-store/{storeId}</caption>
 <colgroup>
@@ -1897,7 +1883,7 @@ Content-Length: 131
   "success" : true,
   "data" : "지점이 폐업되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:43"
 }</code></pre>
 </div>
 </div>
@@ -1911,7 +1897,7 @@ Content-Length: 131
 <div class="sect2">
 <h3 id="_1_메뉴_추가">1. 메뉴 추가</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_9">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_8">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 8. /menu/new/{storeId}</caption>
 <colgroup>
@@ -2000,7 +1986,7 @@ Content-Length: 132
   "success" : true,
   "data" : "메뉴가 추가 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -2009,7 +1995,7 @@ Content-Length: 132
 <div class="sect2">
 <h3 id="_2_메뉴_조회">2. 메뉴 조회</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_10">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_9">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 9. /menu/list/{storeId}</caption>
 <colgroup>
@@ -2108,7 +2094,7 @@ Content-Length: 272
     "soldout" : true
   } ],
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -2117,7 +2103,7 @@ Content-Length: 272
 <div class="sect2">
 <h3 id="_3_메뉴_수정">3. 메뉴 수정</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_11">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_10">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 10. /menu/update/{menuId}</caption>
 <colgroup>
@@ -2206,7 +2192,7 @@ Content-Length: 145
   "success" : true,
   "data" : "메뉴 정보가 업데이트 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -2215,7 +2201,7 @@ Content-Length: 145
 <div class="sect2">
 <h3 id="_4_메뉴_삭제">4. 메뉴 삭제</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_12">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_11">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 11. /menu/remove/{menuId}</caption>
 <colgroup>
@@ -2296,7 +2282,7 @@ Content-Length: 132
   "success" : true,
   "data" : "메뉴가 삭제 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:56"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -2377,7 +2363,7 @@ Content-Length: 138
   "success" : true,
   "data" : "장바구니에 추가 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -2479,7 +2465,7 @@ Content-Length: 356
     "menuPrice" : 48000
   } ],
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -2488,7 +2474,7 @@ Content-Length: 356
 <div class="sect2">
 <h3 id="_3_장바구니_수량_변경">3. 장바구니 수량 변경</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_13">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_12">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 12. /order-menu/update/{orderMenuId}</caption>
 <colgroup>
@@ -2592,7 +2578,7 @@ Content-Length: 132
   "success" : true,
   "data" : "수량이 변경 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:43"
 }</code></pre>
 </div>
 </div>
@@ -2601,7 +2587,7 @@ Content-Length: 132
 <div class="sect2">
 <h3 id="_4_장바구니_선택_메뉴_삭제">4. 장바구니 선택 메뉴 삭제</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_14">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_13">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 13. /order-menu/remove/{orderMenuId}</caption>
 <colgroup>
@@ -2684,7 +2670,7 @@ Content-Length: 142
   "success" : true,
   "data" : "선택한 메뉴가 삭제 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:43"
 }</code></pre>
 </div>
 </div>
@@ -2766,7 +2752,7 @@ Content-Length: 131
   "success" : true,
   "data" : "주문이 생성되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -2895,7 +2881,7 @@ Content-Length: 624
     "totalAmount" : 23000
   },
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -3000,7 +2986,7 @@ Content-Length: 403
     } ]
   } ],
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -3121,7 +3107,7 @@ Content-Length: 682
     "discount" : 3000
   } ],
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -3130,7 +3116,7 @@ Content-Length: 682
 <div class="sect2">
 <h3 id="_5_주문_상태_변경조리_중">5. 주문 상태 변경(조리 중)</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_15">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_14">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 14. /order/cooking-update/{orderId}</caption>
 <colgroup>
@@ -3212,7 +3198,7 @@ Content-Length: 156
   "success" : true,
   "data" : "주문 상태가 조리 중으로 변경 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -3221,7 +3207,7 @@ Content-Length: 156
 <div class="sect2">
 <h3 id="_6_주문_상태_변경배달_중">6. 주문 상태 변경(배달 중)</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_16">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_15">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 15. /order/delivering-update/{orderId}</caption>
 <colgroup>
@@ -3302,7 +3288,7 @@ Content-Length: 156
   "success" : true,
   "data" : "주문 상태가 배달 중으로 변경 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -3311,7 +3297,7 @@ Content-Length: 156
 <div class="sect2">
 <h3 id="_7_주문_상태_변경배달_완료">7. 주문 상태 변경(배달 완료)</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_17">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_16">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 16. /order/delivered-update/{orderId}</caption>
 <colgroup>
@@ -3392,7 +3378,7 @@ Content-Length: 132
   "success" : true,
   "data" : "배달이 완료 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -3401,7 +3387,7 @@ Content-Length: 132
 <div class="sect2">
 <h3 id="_8_주문_취소가게">8. 주문 취소(가게)</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_18">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_17">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 17. /order/cancel-update/{orderId}</caption>
 <colgroup>
@@ -3482,7 +3468,7 @@ Content-Length: 159
   "success" : true,
   "data" : "가게 사정으로 인해 주문이 취소 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -3491,7 +3477,7 @@ Content-Length: 159
 <div class="sect2">
 <h3 id="_9_주문_취소고객">9. 주문 취소(고객)</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_19">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_18">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 18. /order/customer-cancel-update/{orderId}</caption>
 <colgroup>
@@ -3573,7 +3559,7 @@ Content-Length: 132
   "success" : true,
   "data" : "주문이 취소 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:57"
+  "serverDateTime" : "2024-09-22 22:32:42"
 }</code></pre>
 </div>
 </div>
@@ -3647,7 +3633,7 @@ Content-Length: 135
   "success" : true,
   "data" : "관리자가 생성 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:54"
+  "serverDateTime" : "2024-09-22 22:32:36"
 }</code></pre>
 </div>
 </div>
@@ -3656,7 +3642,7 @@ Content-Length: 135
 <div class="sect2">
 <h3 id="_2_어드민_삭제">2. 어드민 삭제</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_20">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_19">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 19. /admin/remove/{adminId}</caption>
 <colgroup>
@@ -3737,7 +3723,7 @@ Content-Length: 135
   "success" : true,
   "data" : "관리자가 삭제 되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:54"
+  "serverDateTime" : "2024-09-22 22:32:36"
 }</code></pre>
 </div>
 </div>
@@ -3828,7 +3814,7 @@ Content-Length: 157
   "success" : true,
   "data" : "어드민 쿠폰이 정상적으로 발급되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:55"
+  "serverDateTime" : "2024-09-22 22:32:40"
 }</code></pre>
 </div>
 </div>
@@ -3914,7 +3900,7 @@ Content-Length: 157
   "success" : true,
   "data" : "브랜드 쿠폰이 정상적으로 발급되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:55"
+  "serverDateTime" : "2024-09-22 22:32:40"
 }</code></pre>
 </div>
 </div>
@@ -4000,7 +3986,7 @@ Content-Length: 157
   "success" : true,
   "data" : "스토어 쿠폰이 정상적으로 발급되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:55"
+  "serverDateTime" : "2024-09-22 22:32:40"
 }</code></pre>
 </div>
 </div>
@@ -4014,7 +4000,7 @@ Content-Length: 157
 <div class="sect2">
 <h3 id="_1_쿠폰_발급_클릭">1. 쿠폰 발급 (클릭)</h3>
 <div class="sect3">
-<h4 id="_request_pathparameter_21">Request-PathParameter</h4>
+<h4 id="_request_pathparameter_20">Request-PathParameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 20. /couponwallet/issuance/{couponId}</caption>
 <colgroup>
@@ -4097,7 +4083,7 @@ Content-Length: 131
   "success" : true,
   "data" : "쿠폰이 발급되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:55"
+  "serverDateTime" : "2024-09-22 22:32:41"
 }</code></pre>
 </div>
 </div>
@@ -4183,7 +4169,7 @@ Content-Length: 137
   "success" : true,
   "data" : "쿠폰코드가 발행되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:55"
+  "serverDateTime" : "2024-09-22 22:32:40"
 }</code></pre>
 </div>
 </div>
@@ -4234,7 +4220,7 @@ Content-Length: 137
 <h4 id="_http_request_38">Http-Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /couponwallet/couponcode/registration?couponCode=3234d120-379d-466c-b7d1-ab78f61ad088 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /couponwallet/couponcode/registration?couponCode=e3080f17-f4f6-412d-9b86-8708684c8980 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 access: JWT-Token
 Host: localhost:8080</code></pre>
@@ -4253,7 +4239,7 @@ Content-Length: 131
   "success" : true,
   "data" : "쿠폰이 등록되었습니다.",
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:55"
+  "serverDateTime" : "2024-09-22 22:32:40"
 }</code></pre>
 </div>
 </div>
@@ -4361,7 +4347,7 @@ Content-Length: 587
     "expiredAt" : "2024-09-30T23:59:59"
   } ],
   "error" : null,
-  "serverDateTime" : "2024-09-18 21:00:55"
+  "serverDateTime" : "2024-09-22 22:32:40"
 }</code></pre>
 </div>
 </div>

@@ -1,4 +1,4 @@
-package clone.coding.coupon.dto.orderMenu;
+package clone.coding.coupon.dto.ordermenu;
 
 import clone.coding.coupon.entity.customer.OrderMenu;
 import lombok.AllArgsConstructor;

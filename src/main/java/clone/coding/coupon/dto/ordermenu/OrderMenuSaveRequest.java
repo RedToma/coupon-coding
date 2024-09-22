@@ -1,4 +1,4 @@
-package clone.coding.coupon.dto.orderMenu;
+package clone.coding.coupon.dto.ordermenu;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

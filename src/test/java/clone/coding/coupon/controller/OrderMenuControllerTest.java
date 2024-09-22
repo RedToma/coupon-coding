@@ -1,15 +1,9 @@
 package clone.coding.coupon.controller;
 
 import clone.coding.coupon.dto.CustomUserDetails;
-import clone.coding.coupon.dto.menu.MenuSaveAndUpdateRequest;
-import clone.coding.coupon.dto.order.OrderFindByMenuNameResponse;
-import clone.coding.coupon.dto.order.OrderListFindAllResponse;
-import clone.coding.coupon.dto.order.OrderSaveRequest;
-import clone.coding.coupon.dto.orderMenu.OrderMenuFindAllResponse;
-import clone.coding.coupon.dto.orderMenu.OrderMenuSaveRequest;
+import clone.coding.coupon.dto.ordermenu.OrderMenuFindAllResponse;
+import clone.coding.coupon.dto.ordermenu.OrderMenuSaveRequest;
 import clone.coding.coupon.entity.customer.Customer;
-import clone.coding.coupon.entity.customer.PaymentType;
-import clone.coding.coupon.entity.customer.StatusType;
 import clone.coding.coupon.restdocs.AbstractRestDocsTests;
 import clone.coding.coupon.service.OrderMenuService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +26,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;

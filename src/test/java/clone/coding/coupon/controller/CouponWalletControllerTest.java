@@ -3,8 +3,6 @@ package clone.coding.coupon.controller;
 import clone.coding.coupon.dto.CustomUserDetails;
 import clone.coding.coupon.dto.coupon.CouponSaveRequest;
 import clone.coding.coupon.dto.couponwallet.CouponWalletFindAllResponse;
-import clone.coding.coupon.dto.orderMenu.OrderMenuFindAllResponse;
-import clone.coding.coupon.dto.orderMenu.OrderMenuSaveRequest;
 import clone.coding.coupon.entity.coupon.DiscountType;
 import clone.coding.coupon.entity.coupon.IssuerType;
 import clone.coding.coupon.entity.customer.Customer;
@@ -33,7 +31,6 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;

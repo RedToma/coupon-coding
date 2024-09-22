@@ -1,13 +1,12 @@
 package clone.coding.coupon.service;
 
-import clone.coding.coupon.dto.orderMenu.OrderMenuFindAllResponse;
-import clone.coding.coupon.dto.orderMenu.OrderMenuSaveRequest;
+import clone.coding.coupon.dto.ordermenu.OrderMenuFindAllResponse;
+import clone.coding.coupon.dto.ordermenu.OrderMenuSaveRequest;
 import clone.coding.coupon.entity.customer.Customer;
 import clone.coding.coupon.entity.customer.OrderMenu;
 import clone.coding.coupon.entity.customer.OrderStatus;
 import clone.coding.coupon.entity.store.Menu;
 import clone.coding.coupon.global.exception.ResourceNotFoundException;
-import clone.coding.coupon.global.exception.error.ErrorCode;
 import clone.coding.coupon.repository.CustomerRepository;
 import clone.coding.coupon.repository.MenuRepository;
 import clone.coding.coupon.repository.OrderMenuRepository;

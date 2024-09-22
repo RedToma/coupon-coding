@@ -30,8 +30,6 @@ include::{snippets}/customer-controller-test/test-customer-pw-modify/http-reques
 include::{snippets}/customer-controller-test/test-customer-pw-modify/http-response.adoc[]
 
 === 4. 주소 변경
-==== Request-PathParameter
-include::{snippets}/customer-controller-test/test-customer-address-modify/http-request.adoc[]
 ==== Request-Parameter
 include::{snippets}/customer-controller-test/test-customer-address-modify/query-parameters.adoc[]
 ==== Response-Parameter
