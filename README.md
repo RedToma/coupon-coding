@@ -92,8 +92,21 @@
 <br/>
 <br/>
 
-## ERD
+## 📄 ERD
+<img width="1430" alt="쿠폰 ERD" src="https://github.com/user-attachments/assets/87b6893a-8228-4351-bde8-a434bb92df1d">
+<img width="1138" alt="image" src="https://github.com/user-attachments/assets/606ca7e5-4b1f-4d04-805c-a4676248b5f6">
 
+- API 명세서
+  <br/>
+  http://ec2-3-38-255-101.ap-northeast-2.compute.amazonaws.com/docs/asciidoc/index.html
+
+
+<br/>
+<br/>
+
+
+## ⚙ 아키텍처
+![쿠폰 배경](https://github.com/user-attachments/assets/38ffd72e-e250-4b47-ade0-4b1d2ef8ee53)
 
 
 
